@@ -5,7 +5,6 @@ class SimplyPollAdmin extends SimplyPoll{
 	private $pollEdit;
 	
 	public function __construct(){
-		parent::__construct();
 		
 		add_action('admin_menu',	array($this, 'addSimplyPollMenu'));
 		add_action('admin_init',	array($this, 'enqueueFiles'));
@@ -156,7 +155,8 @@ class SimplyPollAdmin extends SimplyPoll{
 	
 	public function deletePoll($id){
 		$pollData = parent::getPollDB();
-		unset($pollData[$id]);
+		unset($pollData['polls'][$id]);
+		$pollData['polls'][$id] = 'deleted';
 		parent::setPollDB($pollData);
 		
 		return true;
@@ -171,7 +171,6 @@ class SimplyPollAdmin extends SimplyPoll{
 	private function addPollToDB($poll){
 		
 		$pollData	= parent::getPollDB();
-		$pollData[]	= $poll;
 		
 		return parent::setPollDB($pollData);
 	}

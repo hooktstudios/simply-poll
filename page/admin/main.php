@@ -1,7 +1,7 @@
 <?php
 
 	global $spAdmin;
-	$polls = $spAdmin->grabPoll();
+	$poll = $spAdmin->grabPoll();
 
 ?>
 
@@ -12,18 +12,20 @@
 		<a href="admin.php?page=poll-add" class="add-new-h2">Add New Poll</a>
 	</h2>
 	
-	<?php if($polls) : ?>
+	<?php if($poll['polls']) : ?>
 		
 		<p>&nbsp;</p>
 		
 		<ol>
-			<?php foreach($polls as $key => $poll) : ?>
-				<li>
-					<strong><?php echo $poll['question']; ?></strong> -
-					<a href="admin.php?page=poll-view&amp;id=<?php echo $key; ?>">view</a> | <a href="admin.php?page=poll-delete&amp;id=<?php echo $key; ?>">delete</a><br />
-					Shortcode: <code>[poll id="<?php echo $key; ?>"]</code>
-					<p>&nbsp;</p>
-				</li>
+			<?php foreach($poll['polls'] as $key => $poll) : ?>
+				<?php if($poll !== 'deleted') : ?>
+					<li>
+						<strong><?php echo $poll['question']; ?></strong> -
+						<a href="admin.php?page=poll-view&amp;id=<?php echo $key; ?>">view</a> | <a href="admin.php?page=poll-delete&amp;id=<?php echo $key; ?>">delete</a><br />
+						Shortcode: <code>[poll id="<?php echo $key; ?>"]</code>
+						<p>&nbsp;</p>
+					</li>
+				<?php endif; ?>
 			<?php endforeach; ?>
 		</ol>
 		

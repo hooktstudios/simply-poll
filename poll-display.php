@@ -7,11 +7,11 @@
 			
 					
 	foreach($answers as $key => $aData)
-		$var .=	'<label><input type="radio" name="answer" value="'.$key.'">'.$aData['answer'].'</label>';
+		$var .=	'<label><input type="radio" name="answer" value="'.$key.'">'.$aData['answer'].'</label><br />';
 	
 	
 	$var .=			'</fieldset>'.
-					'<button>Vote</button>'.
+					'<p><button>Vote</button></p>'.
 				'</form>'.
 			'</div>';
 
