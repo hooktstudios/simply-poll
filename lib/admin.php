@@ -172,6 +172,8 @@ class SimplyPollAdmin extends SimplyPoll{
 		
 		$pollData	= parent::getPollDB();
 		
+		$pollData['polls'][] = $poll;
+		
 		return parent::setPollDB($pollData);
 	}
 	

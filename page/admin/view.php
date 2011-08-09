@@ -4,7 +4,6 @@
 	
 	$id			= (int)$_GET['id'];
 	$poll		= $spAdmin->grabPoll($id);
-	print_r($poll);
 	$question	= $poll['question'];
 	$answers	= $poll['answers']
 

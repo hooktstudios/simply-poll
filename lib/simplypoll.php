@@ -57,7 +57,7 @@ class SimplyPoll{
 		$poll = $this->getPollDB();
 		
 		if($id !== null){
-			return $poll[$id];
+			return $poll['polls'][$id];
 		} else {
 			return $poll;
 		}
@@ -88,8 +88,12 @@ class SimplyPoll{
 			return $this->pollData;
 			
 		} else {
-			$seralized = get_option('simplyPoll', array());
-			$pollData = unserialize($seralized);
+			$seralized = get_option('simplyPoll', false);
+			if($seralized){
+				$pollData = unserialize($seralized);
+			} else {
+				$PollData = array();
+			}
 			$this->pollData = $pollData;
 			return $pollData;
 		}
