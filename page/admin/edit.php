@@ -31,7 +31,7 @@
 		Add Poll
 	</h2>
 	
-	<?php if($pollEdit) : ?>
+	<?php if(isset($pollEdit)) : ?>
 		<p>
 			Added: <?php echo date("F j, Y, g:i a", $poll['added']); ?><br />
 			Updated: <?php echo date("F j, Y, g:i a", $poll['updated']); ?>
@@ -53,7 +53,8 @@
 			<p>
 				<h2><label for="question">Question</label></h2>
 				<input type="text" name="question" size="50" tabindex="1" id="question" autocomplete="off" value="<?php
-					echo $poll['question'];
+					if(isset($pollEdit))
+						echo $poll['question'];
 				?>"/>
 			</p>
 			
@@ -63,7 +64,7 @@
 				<ol>
 					
 					<?php 
-						if($poll['answers']) :
+						if(isset($poll['answers'])) :
 							
 							foreach($poll['answers'] as $key => $aData) :
 					?>

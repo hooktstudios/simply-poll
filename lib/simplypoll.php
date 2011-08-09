@@ -101,7 +101,7 @@ class SimplyPoll{
 			if($seralized){
 				$pollData = unserialize($seralized);
 			} else {
-				$PollData = array();
+				$pollData = array();
 			}
 			$this->pollData = $pollData;
 			return $pollData;
