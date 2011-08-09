@@ -4,10 +4,10 @@
 	$id = (int)$_GET['id'];
 	$poll = $spAdmin->grabPoll($id);
 		
-	if($_POST && $_POST['delete'] == 'yes') {
+	if($_POST && $_POST['delete'] == 'Yes') {
 		$spAdmin->deletePoll($_POST['id']);
 		$message = 'Poll deleted';
-	} elseif($_POST && $_POST['delete'] == 'no') {
+	} else if($_POST && $_POST['delete'] == 'No') {
 		$message = 'Fair enough, it\'s not deleted';
 	}
 	
@@ -36,7 +36,7 @@
 			<form method="post">
 				
 				<input type="hidden" name="id" value="<?php echo $id; ?>" />
-				<p><input type="submit" name="delete" value="yes" /> <input type="submit" name="delete" value="no" /></p>
+				<p><input type="submit" name="delete" value="Yes" /> <input type="submit" name="delete" value="No" /></p>
 				
 			</form>
 		
