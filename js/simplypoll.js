@@ -5,32 +5,41 @@ jQuery(function(){
 	
 	function formProcess(e){
 		
-		console.log($(this));
 		e.preventDefault();
 		
-		var poll	= $('input[name=poll]').val();
-		var vote	= $('input[name=answer]:checked').val();
-		var div		= $(this).parent();
-		var action	= $(this).attr('action');
+		var poll	= $('input[name=poll]').val(),
+			vote	= $('input[name=answer]:checked').val(),
+			div		= $(this).parent(),
+			action	= $(this).attr('action');
 		
 		$(this).fadeOut('slow', function(){
 			$(this).empty();
-			var postData = { 'poll': poll, 'vote': vote }
-		    $.post(action, postData, loadResults, 'json');
+			
+			var postData = { poll: poll, vote: vote };
+			console.log(postData);
+		    $.ajax({
+		    	type:		'POST',
+		    	url:		action, 
+		    	data:		postData,
+		    	success:	grabResults, 
+		    	dataType:	'json'
+		    });
 		 });
 	}
 	
-	function loadResults(data) {
+	function grabResults(data) {
 	
 		console.log(data);
-		var totalVotes = 0;
+		
 		var percent;
-		var votedID = data['voted'];
-	
+		var totalVotes	= 0;
+		var votedID		= data['vote'];
+		var totalVotes	= data['totalvotes'];
+		/*
 		for (id in data['answers']) {
 			totalVotes = totalVotes+parseInt(data['answers'][id]['vote']);
 		}
-		
+		*/
 		
 		var html = '<div class="poll"><h3>Poll Results</h3><dl>';
 		

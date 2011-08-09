@@ -25,7 +25,7 @@ class SimplyPoll{
 			$question	= $poll['question'];
 			$answers	= $poll['answers'];
 			
-			$data = include(SP_DIR.'poll-display.php');
+			$data = include(SP_DIR.'page/user/poll-display.php');
 			
 			return $data;
 		}
@@ -33,16 +33,25 @@ class SimplyPoll{
 	
 	public function submitPoll($pollID, $vote=null){
 		$polls = $this->grabPoll();
-		
+				
 		if($vote){
-			$current = (int)$polls[$pollID]['answers'][$vote]['vote'];
+			$current = (int)$polls['polls'][$pollID]['answers'][$vote]['vote'];
 			++$current;
-			$polls[$pollID]['answers'][$vote]['vote'] = (int)$current;
+			$polls['polls'][$pollID]['answers'][$vote]['vote'] = $current;
+			
+			$totalVotes = 0;
+			
+			foreach($polls['polls'][$pollID]['answers'] as $key => $aData){
+				$totalVotes = $totalVotes + $aData['vote'];
+			}
+			
+			$polls['polls'][$pollID]['totalvotes'] = $totalVotes;
+			
 			$success = $this->setPollDB($polls);
 			$polls['voted'] = $vote;
 		}
 		
-		return json_encode($polls[$pollID]);
+		return json_encode($polls['polls'][$pollID]);
 
 	}
 	

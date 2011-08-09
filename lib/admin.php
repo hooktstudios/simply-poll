@@ -100,8 +100,9 @@ class SimplyPollAdmin extends SimplyPoll{
 				$poll = $pollData;
 				
 				if($addPoll){
-					$poll['added']	= time();
-					$poll['active']	= true;
+					$poll['added']		= time();
+					$poll['active']		= true;
+					$poll['totalvotes']	= 0;
 					unset($poll['addPoll']);
 					
 				} else {

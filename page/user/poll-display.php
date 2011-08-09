@@ -1,6 +1,6 @@
 <?php
 	$var =	'<div class="poll" id="poll-'.$id.'">'.
-				'<form action="'.SP_URL.'page/user/poll-results.php">'.
+				'<form method="post" action="'.SP_URL.'page/user/poll-results.php">'.
 					'<input type="hidden" name="poll" value="'.$id.'" />'.
 					'<fieldset>'.
 						'<legend><span>'.$question.'</span></legend>';
