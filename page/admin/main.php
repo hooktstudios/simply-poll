@@ -21,7 +21,7 @@
 				<?php if($poll !== 'deleted') : ?>
 					<li>
 						<strong><?php echo $poll['question']; ?></strong> -
-						<a href="admin.php?page=poll-view&amp;id=<?php echo $key; ?>">view</a> | <a href="admin.php?page=poll-delete&amp;id=<?php echo $poll['id']; ?>">delete</a><br />
+						<a href="admin.php?page=poll-view&amp;id=<?php echo $poll['id']; ?>">view</a> | <a href="admin.php?page=poll-delete&amp;id=<?php echo $poll['id']; ?>">delete</a><br />
 						Shortcode: <code>[poll id="<?php echo $poll['id']; ?>"]</code>
 						<p>&nbsp;</p>
 					</li>

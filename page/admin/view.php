@@ -4,8 +4,8 @@
 	
 	$id			= (int)$_GET['id'];
 	$poll		= $spAdmin->grabPoll($id);
-	$question	= $poll['question'];
-	$answers	= $poll['answers']
+	$question	= $poll[0]['question'];
+	$answers	= unserialize($poll[0]['answers']);
 
 ?>
 <div class="wrap">
