@@ -19,7 +19,7 @@ jQuery(function(){
 	$('button[name=addPoll]').click(function(e){
 		
 		var answer;
-		answer = confirm('Are you sure you\'re happy with the poll (it cannot be edited once confirmed)');
+		answer = true;
 
 		if(answer == false){
 			e.preventDefault();
