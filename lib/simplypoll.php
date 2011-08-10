@@ -64,6 +64,10 @@ class SimplyPoll{
 	 */
 	public function grabPoll($id=null){
 		$poll = $this->getPollDB($id);
+		if (isset($poll[0])) {
+			$poll = $poll[0];
+			$poll['answers'] = unserialize($poll['answers']);
+		}
 		return $poll;
 	}
 
@@ -96,11 +100,9 @@ class SimplyPoll{
 	 * @return	bool
 	 */
 	public function updatePollDB(array $pollData){
-	
-		// NEEDS EDITTING FOR THE ID
 		global $wpdb;
 		
-		$wpdb->query("UPDATE `".SP_TABLE."` SET `question`='".$pollData['question']."', `answers`='".mysql_escape_string(serialize($pollData['answers']))."', `active`='".$pollData['active']."', `totalvotes`='".$pollData['totalvotes']."', `updated`='".$pollData['updated']."' WHERE `id`='2'");
+		$wpdb->query("UPDATE `".SP_TABLE."` SET `question`='".$pollData['question']."', `answers`='".mysql_escape_string(serialize($pollData['answers']))."', `updated`='".$pollData['updated']."' WHERE `id`='".$pollData['id']."'");
 	}
 		
 	/**
@@ -113,16 +115,6 @@ class SimplyPoll{
 		global $wpdb;
 		
 		$wpdb->query("INSERT INTO `".SP_TABLE."` (`question`, `answers`, `added`, `active`, `totalvotes`, `updated`) VALUES ('".$pollData['question']."', '".mysql_escape_string(serialize($pollData['answers']))."', '".$pollData['added']."', '".$pollData['active']."', '".$pollData['totalvotes']."', '".$pollData['updated']."')");
-	}
-	
-	/**
-	 * Delete poll data from DB
-	 * 
-	 * @param	$pollData
-	 * @return	bool
-	 */
-	public function deletePollDB(array $pollData){
-		echo 'Deleted poll, updating db now';
 	}
 
 	/**

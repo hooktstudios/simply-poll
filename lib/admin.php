@@ -50,7 +50,6 @@ class SimplyPollAdmin extends SimplyPoll{
 	 * @param	$pollEdit
 	 */
 	public function setEdit($pollData){
-			
 		$question		= $pollData['question'];
 		$answers		= $pollData['answers'];
 		$posted			= $pollData;
@@ -138,7 +137,7 @@ class SimplyPollAdmin extends SimplyPoll{
 				
 			} elseif($editPoll) {
 				if($this->addPollToDB($poll, $editPoll)) {
-					$return	= 'editted';
+					$return	= '';
 				} else {
 					$return = 'adding to the DB failed';
 				}
