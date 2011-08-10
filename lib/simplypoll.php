@@ -130,7 +130,18 @@ class SimplyPoll{
 		echo 'Deleted poll, updating db now';
 	}
 
-
+	/**
+	 * Get poll data from DB
+	 *
+	 * @return array
+	 */
+	public function newGetPollDB() {
+		global $wpdb;
+		
+		$results = $wpdb->get_results("SELECT * FROM `".SP_TABLE."`", ARRAY_A);
+		
+		return $results; 
+	}
 
 
 	/**
@@ -139,24 +150,25 @@ class SimplyPoll{
 	 * @return	array
 	 */
 	public function getPollDB(){
+	
+		global $wpdb;
 
 		if($this->pollData){
 			return $this->pollData;
 
 		} else {
-			$seralized = get_option('simplyPoll', false);
-			if($seralized){
-				$pollData = unserialize($seralized);
+			$polls['polls'] = $wpdb->get_results("SELECT * FROM `".SP_TABLE."`", ARRAY_A);
+			
+			if(is_array($polls)){
+				for($i=0;$i<count($polls['polls']);$i++) {
+					$polls['polls'][$i]['answers'] = unserialize($polls['polls'][$i]['answers']);
+				}
 			} else {
-				$pollData = array();
+				$polls = array();
 			}
-			$this->pollData = $pollData;
-			return $pollData;
+			$this->pollData = $polls;
+			return $polls;
 		}
-		
-		global $wpdb;
-		
-		$wpdb->get_results("");
 	}
 
 }
