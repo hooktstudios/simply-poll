@@ -59,11 +59,11 @@ class SimplyPollAdmin extends SimplyPoll{
 		$editPoll		= false;
 		
 		// Find out what we are doing: adding or editing
-		if($pollData['addPoll']) {
+		if(isset($pollData['addPoll'])) {
 			$addPoll	= true;
 			unset($pollData['addPoll']);
 			
-		} elseif($pollData['editPoll']) {
+		} elseif(isset($pollData['editPoll'])) {
 			$editPoll	= true;
 			unset($pollData['editPoll']);
 		}
@@ -99,7 +99,7 @@ class SimplyPollAdmin extends SimplyPoll{
 			if($countAnswers > 1) {
 				$poll = $pollData;
 				
-				if($addPoll){
+				if(isset($addPoll)){
 					$poll['added']		= time();
 					$poll['active']		= true;
 					$poll['totalvotes']	= 0;
@@ -129,15 +129,19 @@ class SimplyPollAdmin extends SimplyPoll{
 			$return = $error;
 		
 		} else {
-			if($addPoll) {
-				if($this->addPollToDB($poll)) {
+			if(isset($addPoll)) {
+				if($this->addPollToDB($poll, $editPoll)) {
 					$return	= 'success';
 				} else {
 					$return = 'adding to the DB failed';
 				}
 				
 			} elseif($editPoll) {
-			
+				if($this->addPollToDB($poll, $editPoll)) {
+					$return	= 'editted';
+				} else {
+					$return = 'adding to the DB failed';
+				}
 			}
 		}
 		
@@ -169,11 +173,19 @@ class SimplyPollAdmin extends SimplyPoll{
 	 * @param	$poll
 	 * @return	bool
 	 */
-	private function addPollToDB($poll){
+	private function addPollToDB($poll,$editPoll){
 		
 		$pollData	= parent::getPollDB();
 		
 		$pollData['polls'][] = $poll;
+		
+		if ($editPoll == true) {
+			// New database edit
+			parent::updatePollDB($poll);
+		} else {
+			// New database add
+			parent::newPollDB($poll);
+		}
 		
 		return parent::setPollDB($pollData);
 	}

@@ -39,7 +39,6 @@ if(is_admin()){
 	$spAdmin = new SimplyPollAdmin();
 }
 
-
 function simplyPoll($args){	
 	
 	global $simplyPoll;
