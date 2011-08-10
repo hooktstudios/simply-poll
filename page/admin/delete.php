@@ -1,5 +1,6 @@
 <?php
 	global $spAdmin;
+
 	
 	$id = (int)$_GET['id'];
 	$poll = $spAdmin->grabPoll($id);
@@ -31,7 +32,7 @@
 			<p><a href="<?php admin_url(); ?>admin.php?page=poll">Go back</a></p>
 		<?php else : ?>
 			
-			<p>Are you sure you want to delete poll "<strong><?php echo $poll['question']; ?></strong>"?</p>
+			<p>Are you sure you want to delete poll "<strong><?php echo $poll[0]['question']; ?></strong>"?</p>
 			
 			<form method="post">
 				

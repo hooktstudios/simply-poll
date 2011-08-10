@@ -63,13 +63,8 @@ class SimplyPoll{
 	 * @return	array
 	 */
 	public function grabPoll($id=null){
-		$poll = $this->getPollDB();
-
-		if($id !== null){
-			return $poll['polls'][$id];
-		} else {
-			return $poll;
-		}
+		$poll = $this->getPollDB($id);
+		return $poll;
 	}
 
 
@@ -131,43 +126,35 @@ class SimplyPoll{
 	}
 
 	/**
-	 * Get poll data from DB
-	 *
-	 * @return array
-	 */
-	public function newGetPollDB() {
-		global $wpdb;
-		
-		$results = $wpdb->get_results("SELECT * FROM `".SP_TABLE."`", ARRAY_A);
-		
-		return $results; 
-	}
-
-
-	/**
 	 * Grab poll data from DB
 	 *
 	 * @return	array
 	 */
-	public function getPollDB(){
+	public function getPollDB($id=null){
 	
 		global $wpdb;
-
-		if($this->pollData){
-			return $this->pollData;
-
+		
+		if (isset($id)) {
+			$poll = $wpdb->get_results("SELECT * FROM `".SP_TABLE."` WHERE `id`='".$id."'", ARRAY_A);
+			return $poll;
 		} else {
-			$polls['polls'] = $wpdb->get_results("SELECT * FROM `".SP_TABLE."`", ARRAY_A);
-			
-			if(is_array($polls)){
-				for($i=0;$i<count($polls['polls']);$i++) {
-					$polls['polls'][$i]['answers'] = unserialize($polls['polls'][$i]['answers']);
-				}
+
+			if($this->pollData){
+				return $this->pollData;
+	
 			} else {
-				$polls = array();
+				$polls['polls'] = $wpdb->get_results("SELECT * FROM `".SP_TABLE."`", ARRAY_A);
+				
+				if(is_array($polls)){
+					for($i=0;$i<count($polls['polls']);$i++) {
+						$polls['polls'][$i]['answers'] = unserialize($polls['polls'][$i]['answers']);
+					}
+				} else {
+					$polls = array();
+				}
+				$this->pollData = $polls;
+				return $polls;
 			}
-			$this->pollData = $polls;
-			return $polls;
 		}
 	}
 

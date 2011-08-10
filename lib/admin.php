@@ -159,10 +159,9 @@ class SimplyPollAdmin extends SimplyPoll{
 	}
 	
 	public function deletePoll($id){
-		$pollData = parent::getPollDB();
-		unset($pollData['polls'][$id]);
-		$pollData['polls'][$id] = 'deleted';
-		parent::setPollDB($pollData);
+		global $wpdb;
+		
+		$wpdb->query("DELETE FROM `".SP_TABLE."` WHERE `id`='".$id."'");
 		
 		return true;
 	}	
