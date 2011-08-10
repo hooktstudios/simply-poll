@@ -179,13 +179,11 @@ class SimplyPollAdmin extends SimplyPoll{
 		
 		if ($editPoll == true) {
 			// New database edit
-			parent::updatePollDB($poll);
+			return parent::updatePollDB($poll);
 		} else {
 			// New database add
-			parent::newPollDB($poll);
+			return parent::newPollDB($poll);
 		}
-		
-		return parent::setPollDB($pollData);
 	}
 	
 	

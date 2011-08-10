@@ -32,26 +32,26 @@ class SimplyPoll{
 	}
 
 	public function submitPoll($pollID, $vote=null){
-		$polls = $this->grabPoll();
+		$poll = $this->grabPoll($pollID);
 
-		if($vote){
-			$current = (int)$polls['polls'][$pollID]['answers'][$vote]['vote'];
+		if(isset($vote)){
+			$current = (int)$poll[0]['answers'][$vote]['vote'];
 			++$current;
-			$polls['polls'][$pollID]['answers'][$vote]['vote'] = $current;
+			$poll[0]['answers'][$vote]['vote'] = $current;
 
 			$totalVotes = 0;
 
-			foreach($polls['polls'][$pollID]['answers'] as $key => $aData){
+			foreach($poll[0]['answers'] as $key => $aData){
 				$totalVotes = $totalVotes + $aData['vote'];
 			}
 
-			$polls['polls'][$pollID]['totalvotes'] = $totalVotes;
+			$poll[0]['totalvotes'] = $totalVotes;
 
-			$success = $this->setPollDB($polls);
-			$polls['voted'] = $vote;
+			$success = $this->setPollDB($poll);
+			$poll['voted'] = $vote;
 		}
 
-		return json_encode($polls['polls'][$pollID]);
+		return json_encode($poll[0]);
 
 	}
 
@@ -79,8 +79,9 @@ class SimplyPoll{
 	 * @return	bool
 	 */
 	public function setPollDB(array $pollData){
-		$serialized = serialize($pollData);
-		return update_option('simplyPoll', $serialized);
+		global $wpdb;
+		$answers = serialize($pollData['answers']);
+		$wpdb->query("UPDATE `".SP_TABLE."` SET `answers`='".$answers."', `totalvotes`='".$pollData[0]['totalvotes']."' WHERE `id`='".$pollData['id']."'");
 	}
 
 	/**
@@ -103,6 +104,8 @@ class SimplyPoll{
 		global $wpdb;
 		
 		$wpdb->query("UPDATE `".SP_TABLE."` SET `question`='".$pollData['question']."', `answers`='".mysql_escape_string(serialize($pollData['answers']))."', `updated`='".$pollData['updated']."' WHERE `id`='".$pollData['id']."'");
+		
+		return true;
 	}
 		
 	/**
@@ -115,6 +118,8 @@ class SimplyPoll{
 		global $wpdb;
 		
 		$wpdb->query("INSERT INTO `".SP_TABLE."` (`question`, `answers`, `added`, `active`, `totalvotes`, `updated`) VALUES ('".$pollData['question']."', '".mysql_escape_string(serialize($pollData['answers']))."', '".$pollData['added']."', '".$pollData['active']."', '".$pollData['totalvotes']."', '".$pollData['updated']."')");
+		
+		return true;
 	}
 
 	/**
@@ -135,7 +140,7 @@ class SimplyPoll{
 				return $this->pollData;
 	
 			} else {
-				$polls['polls'] = $wpdb->get_results("SELECT * FROM `".SP_TABLE."`", ARRAY_A);
+				$polls['polls'] = $wpdb->get_results("SELECT * FROM `".SP_TABLE."` ORDER BY `id` ASC", ARRAY_A);
 				
 				if(is_array($polls)){
 					for($i=0;$i<count($polls['polls']);$i++) {
