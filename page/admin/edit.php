@@ -12,15 +12,15 @@
 		$poll	= $spAdmin->grabPoll($id);
 		$btnSubmit['name']		= 'editPoll';
 		$btnSubmit['display']	= 'Update Poll';
+		$pollEdit = true;
 		
 	}
 
 	if(isset($_POST['question'])){
 		$spAdmin->setEdit($_POST);
 		$return		= $spAdmin->getEdit();
-		$poll		= $return['poll'];
+		$poll 		= $spAdmin->grabPoll($return['poll']['id']);
 		$response	= $return['response'];
-		
 	} else{
 		$response = null;
 	}
@@ -62,7 +62,7 @@
 				
 				<legend><h2>Answers</h2></legend>
 				<ol>
-					
+					<input type="hidden" name="id" value="<?php echo $poll['id']; ?>" />
 					<?php 
 						if(isset($poll['answers'])) :
 							

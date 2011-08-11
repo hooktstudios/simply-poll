@@ -5,7 +5,7 @@
 	$id			= (int)$_GET['id'];
 	$poll		= $spAdmin->grabPoll($id);
 	$question	= $poll['question'];
-	$answers	= $poll['answers']
+	$answers	= $poll['answers'];
 
 ?>
 <div class="wrap">

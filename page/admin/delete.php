@@ -1,5 +1,6 @@
 <?php
 	global $spAdmin;
+
 	
 	$id = (int)$_GET['id'];
 	$poll = $spAdmin->grabPoll($id);

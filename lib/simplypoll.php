@@ -1,9 +1,9 @@
 <?php
 
 class SimplyPoll{
-	
+
 	public $pollData;
-	
+
 	public function __construct(){
 		global $wp_scripts;
 		wp_enqueue_script('jquery');
@@ -15,97 +15,134 @@ class SimplyPoll{
 			$wp_scripts->in_footer[] = 'jSimplyPoll';
 		}
 	}
-	
-	
+
+
 	public function displayPoll($args){
-		
+
 		if(isset($args['id'])){
 			$id			= $args['id'];
 			$poll		= $this->grabPoll($id);
 			$question	= $poll['question'];
 			$answers	= $poll['answers'];
-			
+
 			$data = include(SP_DIR.'page/user/poll-display.php');
-			
+
 			return $data;
 		}
-	}	
-	
+	}
+
 	public function submitPoll($pollID, $vote=null){
-		$polls = $this->grabPoll();
-				
-		if($vote){
-			$current = (int)$polls['polls'][$pollID]['answers'][$vote]['vote'];
+		$poll = $this->grabPoll($pollID);
+
+		if(isset($vote)){
+			$current = (int)$poll['answers'][$vote]['vote'];
 			++$current;
-			$polls['polls'][$pollID]['answers'][$vote]['vote'] = $current;
-			
+			$poll['answers'][$vote]['vote'] = $current;
+
 			$totalVotes = 0;
-			
-			foreach($polls['polls'][$pollID]['answers'] as $key => $aData){
+
+			foreach($poll['answers'] as $key => $aData){
 				$totalVotes = $totalVotes + $aData['vote'];
 			}
-			
-			$polls['polls'][$pollID]['totalvotes'] = $totalVotes;
-			
-			$success = $this->setPollDB($polls);
-			$polls['voted'] = $vote;
+
+			$poll['totalvotes'] = $totalVotes;
+
+			$success = $this->setPollDB($poll);
+			$poll['voted'] = $vote;
 		}
-		
-		return json_encode($polls['polls'][$pollID]);
+
+		return json_encode($poll);
 
 	}
-	
-	
+
+
 	/**
 	 * Grab Poll Info
-	 * 
+	 *
 	 * @param	$id
 	 * @return	array
 	 */
 	public function grabPoll($id=null){
-		$poll = $this->getPollDB();
-		
-		if($id !== null){
-			return $poll['polls'][$id];
-		} else {
-			return $poll;
+		$poll = $this->getPollDB($id);
+		if (isset($poll[0])) {
+			$poll = $poll[0];
+			$poll['answers'] = unserialize($poll['answers']);
 		}
+		return $poll;
 	}
-	
-	
+
+
 	/**
 	 * Save poll data to DB
-	 * 
+	 *
 	 * @param	$pollData
 	 * @return	bool
 	 */
 	public function setPollDB(array $pollData){
-		
-		$serialized = serialize($pollData);
-		return update_option('simplyPoll', $serialized);
+		global $wpdb;
+		$answers = serialize($pollData['answers']);
+		$wpdb->query("UPDATE `".SP_TABLE."` SET `answers`='".$answers."', `totalvotes`='".$pollData['totalvotes']."' WHERE `id`='".$pollData['id']."'");
 	}
-	
-	
+
+	/**
+	 * Save poll data to DB when updating a poll
+	 *
+	 * @param	$pollData
+	 * @return	bool
+	 */
+	public function updatePollDB(array $pollData){
+		global $wpdb;
+		
+		$wpdb->query("UPDATE `".SP_TABLE."` SET `question`='".$pollData['question']."', `answers`='".mysql_escape_string(serialize($pollData['answers']))."', `updated`='".$pollData['updated']."' WHERE `id`='".$pollData['id']."'");
+		
+		return true;
+	}
+		
+	/**
+	 * Save poll data to DB for a new poll
+	 * 
+	 * @param	$pollData
+	 * @return	bool
+	 */
+	public function newPollDB(array $pollData){
+		global $wpdb;
+		
+		$wpdb->query("INSERT INTO `".SP_TABLE."` (`question`, `answers`, `added`, `active`, `totalvotes`, `updated`) VALUES ('".$pollData['question']."', '".mysql_escape_string(serialize($pollData['answers']))."', '".$pollData['added']."', '".$pollData['active']."', '".$pollData['totalvotes']."', '".$pollData['updated']."')");
+		
+		return true;
+	}
+
 	/**
 	 * Grab poll data from DB
-	 * 
+	 *
 	 * @return	array
 	 */
-	public function getPollDB(){
+	public function getPollDB($id=null){
+	
+		global $wpdb;
 		
-		if($this->pollData){
-			return $this->pollData;
-			
+		if (isset($id)) {
+			$poll = $wpdb->get_results("SELECT * FROM `".SP_TABLE."` WHERE `id`='".$id."'", ARRAY_A);
+			return $poll;
 		} else {
-			$seralized = get_option('simplyPoll', false);
-			if($seralized){
-				$pollData = unserialize($seralized);
+
+			if($this->pollData){
+				return $this->pollData;
+	
 			} else {
-				$pollData = array();
+				$polls['polls'] = $wpdb->get_results("SELECT * FROM `".SP_TABLE."` ORDER BY `id` ASC", ARRAY_A);
+				
+				if(is_array($polls)){
+					for($i=0;$i<count($polls['polls']);$i++) {
+						$polls['polls'][$i]['answers'] = unserialize($polls['polls'][$i]['answers']);
+					}
+				} else {
+					$polls = array();
+				}
+				$this->pollData = $polls;
+				return $polls;
 			}
-			$this->pollData = $pollData;
-			return $pollData;
 		}
 	}
-	
+
 }
