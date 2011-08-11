@@ -18,8 +18,8 @@ class SimplyPoll{
 
 
 	public function displayPoll($args){
-		
-		if (isset($_COOKIE['sptaken'])) {
+		$limit = get_option('sp_limit');
+		if ($limit == 'yes' && isset($_COOKIE['sptaken'])) {
 			if(in_array($args['id'], unserialize($_COOKIE['sptaken']))) {
 				return 'You have already taken this poll.';
 			}

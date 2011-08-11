@@ -20,6 +20,8 @@ class SimplyPollAdmin extends SimplyPoll{
 		
 		add_menu_page('Simply Poll', 'Polls', $capability, $parentPage, array($this, 'getAdminPageMain'),'', 6);
 		
+		add_submenu_page($parentPage, 'Settings', 'Settings', $capability, 'sp-settings', array($this, 'getAdminPageSettings'));
+		
 		add_submenu_page($parentPage, 'Add New Poll', 'Add New', $capability, 'poll-add', array($this, 'getAdminPageAdd'));
 		add_submenu_page('', 'View Poll', 'View Poll', $capability, 'poll-view', array($this, 'getAdminPageView'));
 		add_submenu_page('', 'Edit Poll', 'Edit Poll', $capability, 'poll-edit', array($this, 'getAdminPageEdit'));
@@ -29,6 +31,9 @@ class SimplyPollAdmin extends SimplyPoll{
 	
 	public function getAdminPageMain(){
 		require(SP_DIR.'/page/admin/main.php');
+	}
+	public function getAdminPageSettings() {
+		require(SP_DIR.'/page/admin/settings.php');
 	}
 	public function getAdminPageView(){
 		require(SP_DIR.'/page/admin/view.php');
