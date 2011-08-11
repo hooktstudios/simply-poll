@@ -35,23 +35,23 @@ class SimplyPoll{
 		$poll = $this->grabPoll($pollID);
 
 		if(isset($vote)){
-			$current = (int)$poll[0]['answers'][$vote]['vote'];
+			$current = (int)$poll['answers'][$vote]['vote'];
 			++$current;
-			$poll[0]['answers'][$vote]['vote'] = $current;
+			$poll['answers'][$vote]['vote'] = $current;
 
 			$totalVotes = 0;
 
-			foreach($poll[0]['answers'] as $key => $aData){
+			foreach($poll['answers'] as $key => $aData){
 				$totalVotes = $totalVotes + $aData['vote'];
 			}
 
-			$poll[0]['totalvotes'] = $totalVotes;
+			$poll['totalvotes'] = $totalVotes;
 
 			$success = $this->setPollDB($poll);
 			$poll['voted'] = $vote;
 		}
 
-		return json_encode($poll[0]);
+		return json_encode($poll);
 
 	}
 
@@ -81,17 +81,7 @@ class SimplyPoll{
 	public function setPollDB(array $pollData){
 		global $wpdb;
 		$answers = serialize($pollData['answers']);
-		$wpdb->query("UPDATE `".SP_TABLE."` SET `answers`='".$answers."', `totalvotes`='".$pollData[0]['totalvotes']."' WHERE `id`='".$pollData['id']."'");
-	}
-
-	/**
-	 * Save poll data to DB when voting
-	 *
-	 * @param	$pollData
-	 * @return	bool
-	 */
-	public function votePollDB(array $pollData){
-		echo 'Voted on the poll, updating db now';
+		$wpdb->query("UPDATE `".SP_TABLE."` SET `answers`='".$answers."', `totalvotes`='".$pollData['totalvotes']."' WHERE `id`='".$pollData['id']."'");
 	}
 
 	/**
