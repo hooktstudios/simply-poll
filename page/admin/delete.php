@@ -22,14 +22,14 @@
 		
 		<p><?php echo $message; ?></p>
 		
-		<p><a href="<?php admin_url(); ?>admin.php?page=poll">Go back</a></p>
+		<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll">Go back</a></p>
 		
 	<?php else : ?>
 	
 		<?php if(!$poll) : ?>
 			<p>There is no poll with the ID <strong><?php echo $id; ?></p>
 			
-			<p><a href="<?php admin_url(); ?>admin.php?page=poll">Go back</a></p>
+			<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll">Go back</a></p>
 		<?php else : ?>
 			
 			<p>Are you sure you want to delete poll "<strong><?php echo $poll['question']; ?></strong>"?</p>
