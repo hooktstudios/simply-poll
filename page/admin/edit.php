@@ -2,12 +2,12 @@
 	global $spAdmin;
 	$response = null;
 	
-	if($_GET['page'] == 'poll-add'){
+	if($_GET['page'] == 'sp-add'){
 		$poll = $_POST;
 		$btnSubmit['name']		= 'addPoll';
 		$btnSubmit['display']	= 'Add Poll';
 		
-	} elseif($_GET['page'] == 'poll-edit') {
+	} elseif($_GET['page'] == 'sp-edit') {
 		$id		= (int)$_GET['id'];
 		$poll	= $spAdmin->grabPoll($id);
 		$btnSubmit['name']		= 'editPoll';
@@ -42,7 +42,7 @@
 	<?php if($response == 'success') : ?>
 		
 		<p>Your new poll has been added!</p>
-		<p><a href="<?php admin_url(); ?>admin.php?page=poll">Go back</a></p>
+		<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll">Go back</a></p>
 	
 	<?php else : ?>
 	

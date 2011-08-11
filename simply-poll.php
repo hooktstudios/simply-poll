@@ -1,14 +1,13 @@
 <?php
 /**
  * @package Simply Poll
- * @version 0.8
+ * @version 1.0
  */
 /*
 Plugin Name: Simply Poll
-Plugin URI: 
-Description: A very simple poll plugin for WordPress
+Description: This plugin easily allows you to create polls
 Author: Neil Sweeney
-Version: 0.8
+Version: 1.0
 Author URI: http://wolfiezero.com/
 */
 
