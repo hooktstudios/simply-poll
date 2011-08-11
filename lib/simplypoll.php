@@ -80,8 +80,15 @@ class SimplyPoll{
 	 */
 	public function setPollDB(array $pollData){
 		global $wpdb;
+		
 		$answers = serialize($pollData['answers']);
-		$wpdb->query("UPDATE `".SP_TABLE."` SET `answers`='".$answers."', `totalvotes`='".$pollData['totalvotes']."' WHERE `id`='".$pollData['id']."'");
+		$j = $wpdb->query("UPDATE `".SP_TABLE."` SET `answers`='".$answers."', `totalvotes`='".$pollData['totalvotes']."' WHERE `id`='".$pollData['id']."'");
+		
+		if ($j == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -93,9 +100,13 @@ class SimplyPoll{
 	public function updatePollDB(array $pollData){
 		global $wpdb;
 		
-		$wpdb->query("UPDATE `".SP_TABLE."` SET `question`='".$pollData['question']."', `answers`='".mysql_escape_string(serialize($pollData['answers']))."', `updated`='".$pollData['updated']."' WHERE `id`='".$pollData['id']."'");
+		$j = $wpdb->query("UPDATE `".SP_TABLE."` SET `question`='".$pollData['question']."', `answers`='".mysql_escape_string(serialize($pollData['answers']))."', `updated`='".$pollData['updated']."' WHERE `id`='".$pollData['id']."'");
 		
-		return true;
+		if ($j == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 		
 	/**
@@ -107,9 +118,14 @@ class SimplyPoll{
 	public function newPollDB(array $pollData){
 		global $wpdb;
 		
-		$wpdb->query("INSERT INTO `".SP_TABLE."` (`question`, `answers`, `added`, `active`, `totalvotes`, `updated`) VALUES ('".$pollData['question']."', '".mysql_escape_string(serialize($pollData['answers']))."', '".$pollData['added']."', '".$pollData['active']."', '".$pollData['totalvotes']."', '".$pollData['updated']."')");
+		$j = $wpdb->query("INSERT INTO `".SP_TABLE."` (`question`, `answers`, `added`, `active`, `totalvotes`, `updated`) VALUES ('".$pollData['question']."', '".mysql_escape_string(serialize($pollData['answers']))."', '".$pollData['added']."', '".$pollData['active']."', '".$pollData['totalvotes']."', '".$pollData['updated']."')");
 		
-		return true;
+		if ($j == 1) {
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 
 	/**
@@ -122,7 +138,7 @@ class SimplyPoll{
 		global $wpdb;
 		
 		if (isset($id)) {
-			$poll = $wpdb->get_results("SELECT * FROM `".SP_TABLE."` WHERE `id`='".$id."'", ARRAY_A);
+			$poll = $wpdb->get_results("SELECT * FROM `".SP_TABLE."` WHERE `id`='".$id."' LIMIT 1", ARRAY_A);
 			return $poll;
 		} else {
 
