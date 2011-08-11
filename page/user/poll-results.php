@@ -3,7 +3,7 @@
 	$value = unserialize($value);
 	$value[] = (int)$_POST['poll'];
 	$value = serialize($value);
-	setcookie('sptaken', $value, time()+3600, '/');
+	setcookie('sptaken', $value, time()+315569260, '/');
 	/**
 	 * Standalone file in WP with access to WP functions & settings
 	 */
