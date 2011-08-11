@@ -130,13 +130,9 @@ class SimplyPoll{
 				return $this->pollData;
 	
 			} else {
-				$polls['polls'] = $wpdb->get_results("SELECT * FROM `".SP_TABLE."` ORDER BY `id` ASC", ARRAY_A);
+				$polls['polls'] = $wpdb->get_results("SELECT `id`, `question` FROM `".SP_TABLE."` ORDER BY `id` ASC", ARRAY_A);
 				
-				if(is_array($polls)){
-					for($i=0;$i<count($polls['polls']);$i++) {
-						$polls['polls'][$i]['answers'] = unserialize($polls['polls'][$i]['answers']);
-					}
-				} else {
+				if(!is_array($polls)){
 					$polls = array();
 				}
 				$this->pollData = $polls;
