@@ -13,7 +13,7 @@ Author URI: http://wolfiezero.com/
 
 global $wpdb;
 
-define('SP_VERSION',	'0.8');
+define('SP_VERSION',	'1.0');
 define('SP_DIR',		dirname(__FILE__).'/');
 define('SP_FILE',		__FILE__);
 define('SP_URL',		get_bloginfo('url').'/wp-content/plugins/simply-poll/');
