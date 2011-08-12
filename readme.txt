@@ -1,5 +1,5 @@
 === Simply Poll ===
-Contributors: WolfieZero, olliea95
+Contributors: wolfiezero, olliea95
 Tags: poll, results, polls, polling, survey, simple, easy, quiz
 Requires at least: 3.2.1
 Tested up to: 3.2.1
