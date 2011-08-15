@@ -5,10 +5,8 @@
 					'<fieldset>'.
 						'<legend><span>'.$question.'</span></legend>';
 			
-	if ($limit == 'yes' && isset($_COOKIE['sptaken'])) {
-		if(in_array($args['id'], unserialize($_COOKIE['sptaken']))) {
-			$var .= 'You have already taken this poll.';
-		}
+	if ($limit == 'yes' && isset($_COOKIE['sptaken']) && in_array($args['id'], unserialize($_COOKIE['sptaken']))) {
+		$var .= 'You have already taken this poll.';
 	} else {
 	foreach($answers as $key => $aData)
 			$var .=	'<label><input type="radio" name="answer" value="'.$key.'">'.$aData['answer'].'</label><br />';
