@@ -3,7 +3,7 @@ Contributors: wolfiezero, olliea95
 Tags: poll, results, polls, polling, survey, simple, easy, quiz
 Requires at least: 3.2.1
 Tested up to: 3.2.1
-Stable tag: 1.0
+Stable tag: 1.1
 
 This plugin easily allows you to create polls.
 
@@ -19,6 +19,10 @@ Creating polls is now easy! With this plugin you can easily create a poll, add i
 1. Go to the new Polls menu page
 
 == Changelog ==
+
+= 1.1 =
+
+* Fix the limiting
 
 = 1.0 =
 
