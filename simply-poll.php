@@ -1,19 +1,19 @@
 <?php
 /**
  * @package Simply Poll
- * @version 1.0
+ * @version 1.1
  */
 /*
 Plugin Name: Simply Poll
 Description: This plugin easily allows you to create polls
 Author: Neil Sweeney
-Version: 1.0
+Version: 1.1
 Author URI: http://wolfiezero.com/
 */
 
 global $wpdb;
 
-define('SP_VERSION',	'1.0');
+define('SP_VERSION',	'1.1');
 define('SP_DIR',		dirname(__FILE__).'/');
 define('SP_FILE',		__FILE__);
 define('SP_URL',		get_bloginfo('url').'/wp-content/plugins/simply-poll/');
