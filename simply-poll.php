@@ -1,27 +1,24 @@
 <?php
-/**
- * @package Simply Poll
- * @version 1.1
- */
 /*
 Plugin Name: Simply Poll
+Version: 1.3
+Plugin URI: http://wolfiezero.com/wordpress/simply-poll/
 Description: This plugin easily allows you to create polls
-Author: Neil Sweeney
-Version: 1.1
+Author: WolfieZero
 Author URI: http://wolfiezero.com/
 */
 
 global $wpdb;
 
-define('SP_VERSION',	'1.1');
+define('SP_VERSION',	'1.3');
 define('SP_DIR',		dirname(__FILE__).'/');
 define('SP_FILE',		__FILE__);
-define('SP_URL',		get_bloginfo('url').'/wp-content/plugins/simply-poll/');
-
+define('SP_URL',		'http://'.$_SERVER['HTTP_HOST'].'/wp-content/plugins/simply-poll-passport/');
 define('SP_TABLE',		$wpdb->get_blog_prefix().'sp_polls');
+define('DIRECT_ACCESS',	'I don\'t think you should be here?');
 
 if(!function_exists('add_action' )){
-	echo 'I don\'t think you should be here?';
+	echo DIRECT_ACCESS;
 	exit;
 }
 
@@ -42,6 +39,8 @@ function simplyPoll($args){
 	
 	global $simplyPoll;
 	
+	wp_enqueue_script('jquery');
+
 	$simplyPoll = new SimplyPoll();
 	return $simplyPoll->displayPoll($args);
 	
@@ -50,7 +49,7 @@ function simplyPoll($args){
 function sp_main_install() {
 	global $wpdb;
 	
-	$wpdb->query("CREATE TABLE IF NOT EXISTS `".SP_TABLE."` (
+	$wpdb->query('CREATE TABLE IF NOT EXISTS `'.SP_TABLE.'` (
 					`id` INT NOT NULL AUTO_INCREMENT ,
 					`question` VARCHAR( 512 ) NOT NULL ,
 					`answers` TEXT NOT NULL ,
@@ -59,5 +58,5 @@ function sp_main_install() {
 					`totalvotes` INT NOT NULL ,
 					`updated` INT NOT NULL ,
 					PRIMARY KEY (  `id` )
-				) ENGINE = MYISAM DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;");
+				) ENGINE = MYISAM DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;');
 }

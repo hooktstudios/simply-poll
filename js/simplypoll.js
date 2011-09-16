@@ -1,8 +1,11 @@
 jQuery(function(){
 
 	var $ = jQuery;
-	$('.poll form').submit(formProcess);  
-	
+	$('.poll form').submit(formProcess);
+
+	/**
+	 * Process through the form 
+	 */
 	function formProcess(e){
 		
 		e.preventDefault();
@@ -11,62 +14,57 @@ jQuery(function(){
 			vote	= $('input[name=answer]:checked').val(),
 			div		= $(this).parent(),
 			action	= $(this).attr('action');
-		
-		$(this).fadeOut('slow', function(){
+
+		$('fieldset', this).fadeOut('slow', function(){
 			$(this).empty();
 			
-			var postData = { poll: poll, vote: vote };
-			console.log(postData);
-		    $.ajax({
-		    	type:		'POST',
-		    	url:		action, 
-		    	data:		postData,
-		    	success:	grabResults, 
-		    	error:		error,
-		    	dataType:	'json'
-		    });
-		 });
+			loadResults(action, poll, vote);
+		});
 	}
-	
-	function error(a,b,c) {
-		console.log(a);
-		console.log(b);
-		console.log(c);	
-	}
-	
-	function grabResults(data) {
-	
-		console.log(data);
+
+	/**
+	 * Load in the results from our AJAX query
+	 */
+	function loadResults(action, pollID, vote) {
 		
+		if(vote > 0) {
+			var postData = { poll: pollID, vote: vote };
+
+		} else {
+			var postData = { poll: pollID };
+		}
+		
+		$.ajax({
+			type:		"POST",
+			url:		action, 
+			data:		postData,
+			success:	displayResults, 
+			dataType:	"json"
+		});
+	
+	}
+
+	function displayResults(data) {
+
 		var percent;
 		var totalVotes	= 0;
 		var pollID		= data['id'];
 		var votedID		= data['voted'];
 		var totalVotes	= data['totalvotes'];
-		/*
-		for (id in data['answers']) {
-			totalVotes = totalVotes+parseInt(data['answers'][id]['vote']);
-		}
-		*/
 		
-		var html = '<div class="poll"><h3>Poll Results</h3><dl>';
-		
-		// foreach ($data['answers'] as $id)
+
+
+		var html = '<dl>';
 		
 		for (id in data['answers']) {
-			percent = Math.round((parseInt(data['answers'][id]['vote'])/parseInt(totalVotes))*100);
-			
-			if (id == votedID) {
-				html = html+'<dt>'+data['answers'][id]['answer']+'</dt><dd>'+percent+'%</dd>\n';
-			} else {
-				html = html+'<dt>'+data['answers'][id]['answer']+'</dt><dd>'+percent+'%</dd>\n';
-			}
+			percent	= Math.round((parseInt(data['answers'][id]['vote'])/parseInt(totalVotes))*100);
+			html 	= html + '<dt>' + data['answers'][id]['answer'] + '</dt><dd style="width:' + percent + '%">' + percent + '%</dd>';
 		}
 		
-		html = html+"</dl><p>Total Votes: "+totalVotes+"</p></div>\n";
+		html	= html + '</dl><p>Total Votes: ' + totalVotes + '</p>';
+		pollID 	= '#poll-'+pollID;
 		
-		pollID = '#poll-'+pollID;
-		
+
 		$(pollID).fadeIn('slow',function(){
 			$(this).append(html);
 		});
