@@ -1,7 +1,5 @@
 <?php
 
-	echo '<pre>'; print_r($_SERVER); echo '</pre>';
-
 	$html = '<div class="poll" id="poll-'.$id.'">';
 
 	$html .= '<form method="post" action="'.WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)).'poll-submit.php">';
