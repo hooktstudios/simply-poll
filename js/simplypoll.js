@@ -18,14 +18,14 @@ jQuery(function(){
 		$('fieldset', this).fadeOut('slow', function(){
 			$(this).empty();
 			
-			loadResults(action, poll, vote);
+			updatePoll(action, poll, vote);
 		});
 	}
 
 	/**
-	 * Load in the results from our AJAX query
+	 * Update the results from our AJAX query
 	 */
-	function loadResults(action, pollID, vote) {
+	function updatePoll(action, pollID, vote) {
 		
 		if(vote > 0) {
 			var postData = { poll: pollID, vote: vote };
@@ -35,11 +35,11 @@ jQuery(function(){
 		}
 		
 		$.ajax({
-			type:		"POST",
+			type:		'POST',
 			url:		action, 
 			data:		postData,
 			success:	displayResults, 
-			dataType:	"json"
+			dataType:	'json'
 		});
 	
 	}
@@ -47,17 +47,16 @@ jQuery(function(){
 	function displayResults(data) {
 
 		var percent;
+		var html;
 		var totalVotes	= 0;
 		var pollID		= data['id'];
 		var votedID		= data['voted'];
 		var totalVotes	= data['totalvotes'];
-		
 
-
-		var html = '<dl>';
+		html = '<dl>';
 		
 		for (id in data['answers']) {
-			percent	= Math.round((parseInt(data['answers'][id]['vote'])/parseInt(totalVotes))*100);
+			percent	= Math.round( ( parseInt(data['answers'][id]['vote']) / parseInt( totalVotes ) ) * 100 );
 			html 	= html + '<dt>' + data['answers'][id]['answer'] + '</dt><dd style="width:' + percent + '%">' + percent + '%</dd>';
 		}
 		
@@ -65,9 +64,7 @@ jQuery(function(){
 		pollID 	= '#poll-'+pollID;
 		
 
-		$(pollID).fadeIn('slow',function(){
-			$(this).append(html);
-		});
+		$(pollID).fadeIn('slow', function() { $(this).append(html); });
 	}
 
 

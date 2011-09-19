@@ -50,5 +50,6 @@ Creating polls is now easy! With this plugin you can easily create a poll, add i
 
 == To Do ==
 
+* Sanatize input
 * Add style options
 * Add export/import options

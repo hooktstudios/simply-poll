@@ -11,7 +11,7 @@
 			
 	if (($limit == 'yes' && isset($_COOKIE['sptaken']) && in_array($args['id'], unserialize($_COOKIE['sptaken']))) || isset($_GET['simply-poll-return'])) {
 	
-		$html .=  'You have already taken this poll.';
+		$html .=  __('You have already taken this poll.', 'poll-taken');
 
 
 	} else {
@@ -22,7 +22,7 @@
 			$html .= '<label><input type="radio" name="answer" value="'.$key.'">'.$aData['answer'].'</label><br />';
 		
 		
-		$html .= '<p><button>Vote</button></p>';
+		$html .= '<p><button>'.__('Vote', 'button-vote').'</button></p>';
 		$html .= '</fieldset>';
 
 	}
