@@ -13,7 +13,7 @@ global $wpdb;
 define('SP_VERSION',	'1.3');
 define('SP_DIR',		dirname(__FILE__).'/');
 define('SP_FILE',		__FILE__);
-define('SP_URL',		'http://'.$_SERVER['HTTP_HOST'].'/wp-content/plugins/simply-poll-passport/');
+define('SP_URL',		'http://'.$_SERVER['HTTP_HOST'].'/wp-content/plugins/simply-poll/');
 define('SP_TABLE',		$wpdb->get_blog_prefix().'sp_polls');
 define('DIRECT_ACCESS',	'I don\'t think you should be here?');
 
