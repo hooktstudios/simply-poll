@@ -6,9 +6,15 @@ class SimplyPollAdmin extends SimplyPoll{
 	
 	public function __construct(){
 		
+		parent::__construct(false);
 		add_action('admin_menu',	array($this, 'addSimplyPollMenu'));
 		add_action('admin_init',	array($this, 'enqueueFiles'));
 		
+	}
+	
+	public function enqueueFiles(){
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('jSimplyPollAdmin', plugins_url('/js/simplypoll-admin.js', SP_FILE));
 	}
 
 	/**
@@ -49,16 +55,19 @@ class SimplyPollAdmin extends SimplyPoll{
 	}
 	
 	
-	/**
-	 * Add New Poll
+	/**************************************************************************
+	 * Add or Edit a Poll
 	 * 
-	 * @param	$pollEdit
+	 * @param	array	$pollData
+	 * @return	array
 	 */
 	public function setEdit($pollData){
+		
 		$question		= $pollData['question'];
 		$answers		= $pollData['answers'];
 		$posted			= $pollData;
 		$countAnswers	= 0;
+		$error			= array();
 		$newPoll		= false;
 		$editPoll		= false;
 		
@@ -75,110 +84,123 @@ class SimplyPollAdmin extends SimplyPoll{
 		
 		// Check to see if all required fields are entered
 		
+		
 		// Does question have a value?
-		if($question){
+		if( $question ) {
 			
-			foreach($answers as $key => $aData) {
+			$pollForDB['question'] = $question;
+			$pollForDS['question'] = stripcslashes($question);
+			unset($pollData['question']);
+			
+		} else {
+			$error[] = 'No question given';
+		}
+		
+		
+		// Do we have answers
+		if( $answers ) {
+			
+			$cntAnswers = 0;
+			
+			// Sort the data out
+			foreach($answers as $key => $answer) {
 				
 				// Unset either way to clean the array
 				unset($pollData['answers'][$key]); 
-				
-				if($aData['answer']){
-					// We have an answer so build that back into the array with new values
-					++$countAnswers;
 					
-					if(isset($aData['vote'])){
-						$vote = $aData['vote'];
+				if($answer['answer']){
+					// We have an answer so build that back into the array with new values
+					++$cntAnswers;
+					
+					// Add vote node if not there already
+					if(isset($answer['vote'])){
+						$vote = $answer['vote'];
 					} else {
 						$vote = 0;
 					}
 					
-					$pollData['answers'][$key]['answer']	= $aData['answer'];
-					$pollData['answers'][$key]['vote']		= $vote;
+					$pollForDB['answers'][$cntAnswers]['answer']	= $answer['answer'];
+					$pollForDB['answers'][$cntAnswers]['vote']		= $vote;
+					$pollForDS['answers'][$cntAnswers]['answer']	= stripcslashes($answer['answer']);
+					$pollForDS['answers'][$cntAnswers]['vote']		= $vote;
 				}
-				
+					
 			}
 			
+			// Quick clean of the array node
+			unset($pollData['answers']);
 			
-			if($countAnswers > 1) {
-				$poll = $pollData;
+			// Do we have enough answers
+			if( $cntAnswers <= 1 ) {
+				$error[] = 'Need at least 2 answers';
+			}
+			
+		} else {
+			$error[] = 'No answers given';
+		}
+		
+			
+		// If we have no error then all good to go
+		if( count($error) == 0 ) {
+			
+			if( isset($addPoll) ) {
 				
-				if(isset($addPoll)){
-					$poll['added']		= time();
-					$poll['active']		= true;
-					$poll['totalvotes']	= 0;
-					unset($poll['addPoll']);
-					
+				$pollID = $this->addPollToDB($pollForDB, false);
+				if($pollID) {
+					header('/admin.php?page=sp-edit&id='.$pollID);
 				} else {
-					unset($poll['editPoll']);
-					
+					$error	= 'adding to the DB failed';
 				}
-				
-				$poll['updated'] = time();
 				
 			} else {
-				// I like humor, what of it?
-				if($countAnswers == 1){
-					$error = 'Not enough answers; a question isn\'t a question with one answer!';
-				} else {
-					$error = 'No answers; what the sound of one tree clapping?';
-				}
+				unset($poll['editPoll']);
 			}
 			
+			$poll['updated'] = time();
+			
+			
+			return $pollForDS;
+			
 		} else {
-			$error = 'No question given; how can somebody answer this question, this ain\'t Jepoardy!';
+			
+			$pollForDS['error'] = $error;
+			return $pollForDS;
+			
 		}
-		
-		if(isset($error)) {
-			$return = $error;
-		
-		} else {
-			if(isset($addPoll)) {
-				if($this->addPollToDB($poll, $editPoll)) {
-					$return	= 'success';
-				} else {
-					$return = 'adding to the DB failed';
-				}
-				
-			} elseif($editPoll) {
-				if($this->addPollToDB($poll, $editPoll)) {
-					$return	= '';
-				} else {
-					$return = 'adding to the DB failed';
-				}
-			}
-		}
-		
-		$this->pollEdit['poll']		= $posted;
-		$this->pollEdit['response']	= $return;
+			
 		
 	}
-	/**
-	 * Add New Poll Return
-	 * 
-	 * @return	string
-	 */
-	public function getEdit(){
-		return $this->pollEdit;
-	}
+
 	
+	/**************************************************************************
+	 * Delete Poll
+	 * 
+	 * $param	int	$id
+	 */
 	public function deletePoll($id){
 		global $wpdb;
-		
-		$wpdb->query("DELETE FROM `".SP_TABLE."` WHERE `id`='".$id."'");
-		
+		$wpdb->query('
+			DELETE FROM 
+				`'.SP_TABLE.'` 
+			WHERE `id`="'.$id.'"
+		');
 		return true;
 	}	
 	
-	/**
+	
+	/**************************************************************************
 	 * Add New Poll to DB
 	 * 
 	 * @param	$poll
-	 * @return	bool
+	 * @return	bool or int
 	 */
-	private function addPollToDB($poll,$editPoll){
+	private function addPollToDB($poll, $editPoll){
 		
 		$pollData	= parent::getPollDB();
+		
+		$poll['added']		= time();
+		$poll['active']		= true;
+		$poll['totalvotes']	= 0;
 		
 		$pollData['polls'][] = $poll;
 		
@@ -189,11 +211,5 @@ class SimplyPollAdmin extends SimplyPoll{
 			// New database add
 			return parent::newPollDB($poll);
 		}
-	}
-	
-	
-	public function enqueueFiles(){
-		wp_enqueue_script('jquery');
-		wp_enqueue_script('jSimplyPollAdmin', plugins_url('/js/simplypoll-admin.js', SP_FILE));
 	}
 }

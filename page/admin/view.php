@@ -18,4 +18,8 @@
 			<dd><?php echo $aData['vote']; ?></dd>
 		<?php endforeach; ?>
 	</dl>
+	
+	<form>
+		<button class="button">Reset</button>
+	</form>
 </div>

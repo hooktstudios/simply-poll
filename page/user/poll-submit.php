@@ -1,24 +1,20 @@
 <?php
-/**
- * Standalone file in WP with access to WP functions & settings
- */
-$wpRoot = '../../../../..';
-if (file_exists($wpRoot.'/wp-load.php'))
-	require_once($wpRoot.'/wp-load.php');
-else 
-	require_once($wpRoot.'/wp-config.php');
+require_once('../inc/wproot.php');	
+require('logger.php');
+$logger = new logger();
 
+$logger->log('file opened');
 
 // Check if poll is set (also can be used to check for direct access)
-if(isset($_POST['poll'])){
+if( isset($_POST['poll']) ) {
 
 	// Set our poll variable
-	$poll = $_POST['poll'];
-
+	$pollID = (int)$_POST['poll'];
+	
 	// Check if a vote has occured
-	if(isset($_POST['vote'])){	
-
-		$vote = $_POST['vote'];
+	if( isset($_POST['answer']) ) {	
+		
+		$answer = $_POST['answer'];
 
 		// Check if we have the 'sptaken' cookie before trying to get data
 		if(isset($_COOKIE['sptaken']))
@@ -27,34 +23,40 @@ if(isset($_POST['poll'])){
 			$taken	= null;
 
 		$taken		= unserialize($taken);	// Unsearlize $taken to get an array
-		$taken[]	= (int)$_POST['poll'];	// Add this poll's ID to the $taken array
+		$taken[]	= $pollID;				// Add this poll's ID to the $taken array
 		$taken		= serialize($taken);	// Serialize $taken array ready to be stored again
 
 		setcookie('sptaken', $taken, time()+315569260, '/');
 
 	} else {
-		$vote = null;
+		$answer = null;
 
 	}
 
 		
 	$simplyPoll = new SimplyPoll();
 
-	if(!isset($_POST['backurl'])) {
-		echo $simplyPoll->submitPoll($poll, $vote);
+	if( !isset($_POST['backurl']) ) {
+		$return['load']		= $simplyPoll->submitPoll($pollID, $answer);
+		$return['pollid']	= $pollID;
+		
+		echo json_encode($return);
 
 	} else {
-		$simplyPoll->submitPoll($poll, $vote);
+		$simplyPoll->submitPoll($pollID, $answer);
+		
+		$regex = '/(.[^\?]*)/';		
+		$querystring = preg_replace($regex, '', $_POST['backurl']);
 
-		$querystring = preg_replace('/(https?://)?(www\.)?([a-zA-Z0-9_%\-+!\(\)]*)\b\.[a-z]{2,4}(\.[a-z]{2})?((/[a-zA-Z0-9_%\-+!\(\)]*)+)?(\.[a-z]*)?/', '', $_POST['backurl']);
-
-		if($querystring){
-			$url = $_POST['backurl'].$querystring.'&';
+		if( $querystring ) {
+			preg_match($regex, $_POST['backurl'], $matches);
+			$url = $matches[0].$querystring.'&';
+			
 		} else {
 			$url = $_POST['backurl'].'?';
 		}
 
-		header('Location: '.$url.'simply-poll-return='.$vote);
+		header('Location: '.$url.'simply-poll-return='.$answer);
 
 	}
 
