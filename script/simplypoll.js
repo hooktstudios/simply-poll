@@ -46,8 +46,6 @@ jQuery(function(){
 
 	function displayResults(data) {
 
-		console.log(data.load);
-
 		var html = $.ajax({
 			type:		'POST',
 			async:		false,

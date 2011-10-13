@@ -1,6 +1,6 @@
 <?php
 
-class SimplyPoll{
+class SimplyPoll {
 
 	public	$pollData;
 	private	$pollDB;

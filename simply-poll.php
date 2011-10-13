@@ -11,16 +11,18 @@ Author URI: http://wolfiezero.com/
 global $wpdb;
 
 
-define('SP_VERSION',	'1.3');
-define('SP_DIR',		dirname(__FILE__).'/');
-define('SP_FILE',		__FILE__);
-define('SP_URL',		'http://'.$_SERVER['HTTP_HOST'].'/wp-content/plugins/simply-poll/');
-define('SP_URI',		$_SERVER['DOCUMENT_ROOT'].'/wp-content/plugins/simply-poll/');
-define('SP_TABLE',		$wpdb->get_blog_prefix().'sp_polls');
-define('DIRECT_ACCESS',	'I don\'t think you should be here?');
+define('SP_VERSION',		'1.3');
+define('SP_DIR',			dirname(__FILE__).'/');
+define('SP_FILE',			__FILE__);
+define('SP_URL',			'http://'.$_SERVER['HTTP_HOST'].'/wp-content/plugins/simply-poll/');
+define('SP_URI',			$_SERVER['DOCUMENT_ROOT'].'/wp-content/plugins/simply-poll/');
+define('SP_TABLE',			$wpdb->get_blog_prefix().'sp_polls');
+define('SP_DIRECT_ACCESS',	'I don\'t think you should be here?');
+define('SP_CSS_USER',		plugins_url('/simply-poll/css/default.css'));
+define('SP_CSS_ADMIN',		plugins_url('/simply-poll/css/admin.css'));
 
-if(!function_exists('add_action' )){
-	echo DIRECT_ACCESS;
+if( !function_exists('add_action') ) {
+	echo SP_DIRECT_ACCESS;
 	exit;
 }
 
@@ -29,17 +31,20 @@ require('lib/admin.php');
 require('lib/db.php');
 
 add_shortcode('poll', 'simplyPoll');
+add_action('admin_head', function() {
+		echo '<link type="text/css" rel="stylesheet/css" media="all" href="'.SP_CSS_ADMIN.'" >';
+	} );
+
+wp_register_style('simplypollCSS', SP_CSS_USER, false, SP_VERSION, 'all');
+
+wp_enqueue_style('simplypollCSS');
+wp_enqueue_script('jquery');
 
 // Registers the activation hook - runs the install function when the plugin is activated
 register_activation_hook(__FILE__, 'spInstall');
 
-if(is_admin()){
-	global $spAdmin;
-	$spAdmin = new SimplyPollAdmin();
-	add_action('admin_head', function() {
-		echo '<link type="text/css" rel="stylesheet/css" media="all" href="'.SP_URL.'css/admin.css" >';
-	} );
-		
+if( is_admin() ) {
+	simplyPollAdmin();
 }
 
 /**
@@ -47,17 +52,19 @@ if(is_admin()){
  * Handles Simply Poll on the client side of the site
  * 
  * @param	array	$args
- * @retuen	string	HTML output of the poll
+ * @return	string	HTML output of the poll
  */
 function simplyPoll($args){	
-	
 	global $simplyPoll;
 	
-	wp_enqueue_script('jquery');
-
 	$simplyPoll = new SimplyPoll();
 	return $simplyPoll->displayPoll($args);
-	
+}
+
+
+function simplyPollAdmin() {
+	global $spAdmin;
+	$spAdmin = new SimplyPollAdmin();	
 }
 
 function spInstall() {

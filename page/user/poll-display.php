@@ -1,13 +1,3 @@
-<style>
-	.poll label{
-		display: block;
-	}
-	.poll dd{
-		border-top:	2px solid #333;
-		display: block;
-	}
-</style>
-
 <div class="poll" id="poll-<?php echo $id; ?>">
 	<p class="question"><?php echo $question; ?></p>
 	

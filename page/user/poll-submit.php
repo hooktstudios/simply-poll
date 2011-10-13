@@ -1,9 +1,5 @@
 <?php
 require_once('../inc/wproot.php');	
-require('logger.php');
-$logger = new logger();
-
-$logger->log('file opened');
 
 // Check if poll is set (also can be used to check for direct access)
 if( isset($_POST['poll']) ) {
@@ -61,5 +57,5 @@ if( isset($_POST['poll']) ) {
 	}
 
 } else {
-	echo DIRECT_ACCESS;
+	echo SP_DIRECT_ACCESS;
 }

@@ -11,7 +11,7 @@
 	$totalvotes = $results['totalvotes'];
 ?>
 
-<dl class="poll-results">
+<dl class="results">
 	<?php foreach($answers as $key => $answer) : ?>
 		
 		<?php
@@ -24,4 +24,4 @@
 	<?php endforeach; ?>
 </dl>
 
-<p>Total votes: <?php echo $totalvotes; ?></p>
+<p>total votes: <?php echo $totalvotes; ?></p>

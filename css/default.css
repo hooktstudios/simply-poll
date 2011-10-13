@@ -1,0 +1,47 @@
+.poll {
+	border:			1px solid #DDD;
+	width:			200px;
+	padding:		5px;
+	border-radius:	5px;
+	background:		#FEFEFE;
+	margin:			1em 0;	
+	box-shadow:		0 0 5px rgba(0,0,0,0.2);
+}
+	.poll label,
+	.poll input,
+	.poll button {
+		cursor:			pointer;
+	}
+	.poll label {
+		display:		block;
+		margin:			0.5em 0;
+	}
+	
+	.poll dl {
+		margin:			0.5em 0;
+	}
+	.poll dt {
+		margin:			0;
+	}
+	.poll dd {
+		margin:			0;
+		border-top:		2px solid #333;
+		display:		block;
+	}
+	
+	.poll p {
+		margin:			0;
+		text-align:		center;
+	}
+	
+	.poll .question {
+		font-weight:	700;
+		font-size:		1.1em;
+		margin:			0 0 3px;
+		border-bottom:	1px solid #DDD;
+		text-align:		left;
+	}
+	
+	.poll button {
+		width:			60%;
+	}
