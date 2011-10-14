@@ -21,6 +21,7 @@ class SimplyPollAdmin extends SimplyPoll{
 		wp_enqueue_script('jSimplyPollAdmin',	plugins_url('/script/simplypoll-admin.js',		SP_FILE),	false,	SP_VERSION);
 		wp_enqueue_script('jqPlotMain',			plugins_url('/script/jqplot.min.js',			SP_FILE),	false,	SP_VERSION);
 		wp_enqueue_script('jqPlotPie',			plugins_url('/script/jqplot.pieRenderer.js',	SP_FILE),	false,	SP_VERSION);
+		wp_enqueue_script('masonry',			plugins_url('/script/masonry.min.js',			SP_FILE),	false,	SP_VERSION);
 		
 		wp_register_style('spAdminCSS',			plugins_url('/css/admin.css',					SP_FILE),	false,	SP_VERSION);
 		
