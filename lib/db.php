@@ -100,8 +100,6 @@ class SimplyPollDB {
 					`'.SP_TABLE.'`
 				WHERE
 					`id`	= '.$id.'
-				LIMIT
-					1
 			';
 			return $wpdb->get_results($sql, ARRAY_A);
 			

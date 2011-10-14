@@ -51,21 +51,24 @@ class SimplyPoll {
 	 * @return	string
 	 *************************************************************************/
 	public function displayPoll(array $args) {
+		
 		$limit = get_option('sp_limit');
 
 		if( isset($args['id']) ) {
 			$id			= $args['id'];
 			$poll		= $this->grabPoll($id);
-			$question	= stripcslashes($poll['question']);
-			$answers	= $poll['answers'];
 			
-			foreach( $answers as $key => $answer ) {
-				$answers[$key]['answer'] = stripcslashes($answer['answer']);
+			if( isset($poll['question']) ) {
+				$question	= stripcslashes($poll['question']);
+				$answers	= $poll['answers'];
+				
+				foreach( $answers as $key => $answer ) {
+					$answers[$key]['answer'] = stripcslashes($answer['answer']);
+				}
+	
+				include(SP_DIR.'page/user/poll-display.php');	
 			}
-
-			$data = include(SP_DIR.'page/user/poll-display.php');
-
-			return $data;
+			
 		}
 		
 	}
@@ -111,7 +114,9 @@ class SimplyPoll {
 	 * @return	array
 	 *************************************************************************/
 	public function grabPoll($id=null){
+		
 		$poll = $this->pollDB->getPollDB($id);
+		
 		if (isset($poll[0])) {
 			$poll = $poll[0];
 			$poll['answers'] = unserialize($poll['answers']);

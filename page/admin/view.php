@@ -52,7 +52,13 @@
 	</script>
 	
 	<p>
-		<a href="admin.php?page=sp-reset&amp;id=<?php echo $id; ?>" class="button">reset</a>
+		<a href="<?php admin_url(); ?>admin.php?page=sp-update&amp;id=<?php echo $id; ?>" class="button">update</a>
+		<a href="<?php admin_url(); ?>admin.php?page=sp-reset&amp;id=<?php echo $id; ?>" class="button">reset</a>
+		<a href="<?php admin_url(); ?>admin.php?page=sp-delete&amp;id=<?php echo $id; ?>" class="button">delete</a>
+	</p>
+	
+	<p>
+		<a href="<?php admin_url(); ?>admin.php?page=sp-poll" class="button">back to polls</a>
 	</p>
 
 </div>

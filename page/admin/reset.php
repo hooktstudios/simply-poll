@@ -32,7 +32,9 @@
 		
 		<p><?php echo $message; ?></p>
 		
-		<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll" class="button">Go back</a></p>
+		<p>Redirecting you back to "<?php echo $poll['question']; ?>" in 3 seconds...</p>
+		
+		<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll" class="button">back</a> <a href="<?php admin_url(); ?>admin.php?page=sp-veiw&id=<?php echo $id; ?>" class="button">back</a></p>
 		
 	<?php else : ?>
 	

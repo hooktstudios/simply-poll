@@ -1,4 +1,4 @@
-<?php
+ <?php
 	if( isset($_POST['pollid']) ) {
 		require_once('../inc/wproot.php');	
 		$pollid = $_POST['pollid'];

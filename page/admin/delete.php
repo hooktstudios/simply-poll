@@ -32,7 +32,7 @@
 		
 		<p><?php echo $message; ?></p>
 		
-		<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll" class="button">Go back</a></p>
+		<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll" class="button">back</a></p>
 		
 	<?php else : ?>
 	
