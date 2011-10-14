@@ -19,6 +19,8 @@ class SimplyPollDB {
 	public function newPollDB(array $pollData) {
 		global $wpdb;
 		
+		$answers = serialize($pollData['answers']);
+		
 		$sql = '
 			INSERT INTO 
 				`'.SP_TABLE.'` (
@@ -30,12 +32,12 @@ class SimplyPollDB {
 					`updated`
 				) 
 				VALUES (
-					"'.$pollData['question'].'",
-					"'.mysql_escape_string(serialize($pollData['answers'])).'",
-					"'.$pollData['added'].'",
-					"'.$pollData['active'].'",
-					"'.$pollData['totalvotes'].'",
-					"'.$pollData['updated'].'"
+					"'.mysql_escape_string($pollData['question']).'",
+					"'.mysql_escape_string($answers).'",
+					"'.(int)$pollData['time'].'",
+					"'.(int)$pollData['active'].'",
+					"'.(int)$pollData['totalvotes'].'",
+					"'.(int)$pollData['time'].'"
 				)
 		';
 			
@@ -45,6 +47,38 @@ class SimplyPollDB {
 			return false;
 		}
 		
+	}
+
+
+	/**
+	 * Save poll data to DB when updating a poll
+	 *
+	 * @param	$pollData
+	 * @return	bool
+	 *************************************************************************/
+	public function updatePollDB(array $pollData) {
+		global $wpdb;
+		
+		$answers = serialize($pollData['answers']);
+		
+		$sql = '
+			UPDATE 
+				`'.SP_TABLE.'` 
+			SET 
+				`question`	= \''.$pollData['question'].'\',
+				`answers`	= \''.mysql_escape_string($answers).'\', 
+				`updated`	= \''.(int)$pollData['time'].'\'
+			WHERE 
+				`id`		= '.$pollData['id'].'
+		';
+		
+		if( $wpdb->query($sql) ) {
+			return $pollData['id'];
+		} else {
+			return false;
+		}
+		
+		return $wpdb->query($sql);
 	}
 	
 	
@@ -98,30 +132,6 @@ class SimplyPollDB {
 			}
 		}
 	}
-
-
-	/**
-	 * Save poll data to DB when updating a poll
-	 *
-	 * @param	$pollData
-	 * @return	bool
-	 *************************************************************************/
-	public function updatePollDB(array $pollData) {
-		global $wpdb;
-		
-		$sql = '
-			UPDATE 
-				`'.SP_TABLE.'` 
-			SET 
-				`question`	= \''.$pollData['question'].'\',
-				`answers`	= \''.mysql_escape_string(serialize($pollData['answers'])).'\', 
-				`updated`	= \''.$pollData['updated'].'\'
-			WHERE 
-				`id`		= '.$pollData['id'].'
-		';
-		
-		return $wpdb->query($sql);
-	}
 	
 	
 	/**
@@ -139,8 +149,8 @@ class SimplyPollDB {
 			UPDATE 
 				`'.SP_TABLE.'` 
 			SET 
-				`answers`		= \''.$answers.'\', 
-				`totalvotes`	= \''.$pollData['totalvotes'].'\' 
+				`answers`		= \''.mysql_escape_string($answers).'\', 
+				`totalvotes`	= '.(int)$pollData['totalvotes'].' 
 			WHERE 
 				`id`			= '.$pollData['id'].'
 		';
@@ -167,4 +177,40 @@ class SimplyPollDB {
 		return $wpdb->query($sql);
 	}	
 	
+	
+	
+	/**
+	 * Reset Poll
+	 * 
+	 * @param	array	$pollData
+	 * @return	bool
+	 *************************************************************************/
+	public function resetPoll(array $pollData) {
+		global $wpdb;
+		
+		$answers = array();
+		
+		foreach($pollData['answers'] as $key => $answer) {
+			$answers[$key] = array(
+				'answer'	=> 	$answer['answer'],
+				'vote'		=> 0
+			);
+		}
+		
+		$answers = serialize($answers);
+		
+		$sql = '
+			UPDATE 
+				`'.SP_TABLE.'` 
+			SET 
+				`answers`		= \''.mysql_escape_string($answers).'\', 
+				`totalvotes`	= 0,
+				`updated`		= '.(int)time().'
+			WHERE 
+				`id`			= '.$pollData['id'].'
+		';
+		
+		return $wpdb->query($sql);
+		
+	}
 }

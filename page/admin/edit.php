@@ -5,36 +5,23 @@
 	
 	if( $_GET['page'] == 'sp-add' ) {
 		
-		$pollAdd				= true;
-		
 		$poll					= $_POST;
-		$formData['name']		= 'addPoll';
 		$formData['display']	= 'Add Poll';
 		
-		
-	} elseif( $_GET['page'] == 'sp-edit' ) {
-		
-		$pollEdit				= true;
+	} elseif( $_GET['page'] == 'sp-update' ) {
 		
 		$id						= (int)$_GET['id'];
-		
 		$poll					= $spAdmin->grabPoll($id);
-		$formData['name']		= 'editPoll';
-		$formData['display']	= 'Edit Poll';
-		
-	}
-
-	echo '<pre>'; print_r($_POST); echo '</pre>';
-
-	if( isset($_POST['pollsubmitted']) ) {
-		
-		$poll					= $spAdmin->setEdit($_POST);
-		
-	echo '<pre>'; print_r($poll); echo '</pre>';
+		$formData['display']	= 'Update Poll';
 		
 	}
 	
+	if( isset($_POST['polledit']) ) {
+		$poll = $spAdmin->setEdit($_POST);
+	}
+	
 ?><div class="wrap">
+	
 	<div id="icon-edit-comments" class="icon32"><br /></div> 
 	<h2><?php echo $formData['display']; ?></h2>
 	
@@ -54,28 +41,30 @@
 		}
 	?>
 	
-	<?php if( isset($pollEdit) ) : ?>
-		<p>
-			Added: <?php echo date("F j, Y, g:i a", $poll['added']); ?><br />
-			Updated: <?php echo date("F j, Y, g:i a", $poll['updated']); ?>
-		</p>
-	<?php endif; ?>
-	
 
-	<?php if( $response == 'success' ) : ?>
-		
-		<p>Your new poll has been added!</p>
-		<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll">Go back</a></p>
-	
+	<?php if( isset($poll['return']['success']) ) : ?>
+		<h3><?php echo $poll['return']['success']; ?></h3>
+		<p>
+			<a href="admin.php?page=sp-poll">Go back</a> or 
+			<a href="admin.php?page=sp-update&id=<?php echo $poll['return']['pollid']; ?>">update "<?php echo $poll['question']; ?>"</a>
+		</p>
 	<?php else : ?>
 	
 		<p><?php echo $response; ?></p>
+	
+		<?php if( isset($poll['updated']) ) : ?>
+			<p>
+				Added: <?php echo date('F j, Y, g:i a', $poll['added']); ?><br />
+				Updated: <?php echo date('F j, Y, g:i a', $poll['updated']); ?>
+			</p>
+		<?php endif; ?>
+
 		
-		<form method="post">
+		<form method="post" id="polledit">
 			
 			<p>
 				<h2><label for="question">Question</label></h2>
-				<input type="text" name="question" size="50" id="question" value="<?php
+				<input type="text" name="question" size="50" class="required" id="question" value="<?php
 					if( isset($poll['question']) )
 						echo stripcslashes($poll['question']);
 				?>"/>
@@ -83,51 +72,45 @@
 			
 			<fieldset id="answers">
 				
-				<?php
-					if( isset($poll['id']) ){
-						echo '<input type="hidden" name="id" value="'.$poll['id'].'" />';
-					}
-				?>
-				
 				<legend><h2>Answers</h2></legend>
-				<ol>
-					<?php 
-						if( isset($poll['answers']) && isset($pollEdit) ) :
-							foreach($poll['answers'] as $key => $aData) :
-					?>
-						<li>
-							<input type="text" name="answers[<?php echo $key; ?>][answer]" value="<?php echo stripcslashes($aData['answer']); ?>" /> 
-							Votes: <strong><?php echo $aData['vote']; ?></strong>
-							<?php if(isset($aData['vote'])) : ?>
-								<input type="hidden" name="answers[<?php echo $key; ?>][vote]" value="<?php echo $aData['vote']; ?>" />
-							<?php endif; ?>
-						</li>
+				<ul>
 					<?php
-							endforeach;
-						else :
-					?>
-					<?php
-						for( $i=1; $i<10; ++$i ) {
+						if( isset($poll['answers']) ) {
+							$limit = count($poll['answers']);
+						} else {
+							$limit = 10;
+						}
+					
+						for( $i=1; $i<=$limit; ++$i ) {
+							$answer	= null;
+							$class	= null;
+							$votes	= null;
 							
-							if( isset($poll['answers'][$i]['answer']) ){
-								$answer = $poll['answers'][$i]['answer'];
-							} else {
-								$answer = null;
-							}
+							if( isset($poll['answers'][$i]['answer']) )
+								$answer	= $poll['answers'][$i]['answer'];
 							
-							echo '<li><input type="text" name="answers['.$i.'][answer]" value="'.$answer.'" /></li>';
+							if( $i<=2 )
+								$class	= 'required';
+							
+							if( isset($poll['answers'][$i]['vote']) )
+								$votes	= 'votes: <strong>'.$poll['answers'][$i]['vote'].'</strong>';
+							
+							echo '<li><input type="text" name="answers['.$i.'][answer]" size="50" value="'.$answer.'" class="'.$class.'" /> '.$votes.'</li>';
 						}
 					?>
-					<?php
-						endif;
-					?>
-				</ol>
+				</ul>
 				
 			</fieldset>
+
+			<?php
+				if( isset($id) ){
+					$buttonValue = $id;
+				} else {
+					$buttonValue = 'new';
+				}
+			?>
 			
-			<input type="hidden" name="pollsubmitted" value="true" />
-			
-			<p><button type="submit" name="<?php echo $formData['name']; ?>" value="true" class="button-primary"><?php echo $formData['display']; ?></p>
+			<p><button type="submit" name="polledit" value="<?php echo $buttonValue; ?>" class="button-primary"><?php echo $formData['display']; ?></p>
 			
 		</form>
 	<?php endif; ?>

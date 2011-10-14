@@ -16,14 +16,16 @@
 		<?php else : ?>
 			
 			<fieldset>
+				<ul>
 				<?php foreach($answers as $key => $answers) : ?>
 
-					<label>
-						<input type="radio" name="answer" value="<?php echo $key; ?>" />
-						<?php echo $answers['answer']; ?>
-					</label>
+					<li>
+						<input type="radio" name="answer" value="<?php echo $key; ?>" id="poll-<?php echo $id; ?>-<?php echo $key; ?>" />
+						<label for="poll-<?php echo $id; ?>-<?php echo $key; ?>"><?php echo $answers['answer']; ?></label>
+					</li>
 					
 				<?php endforeach; ?>
+				</ul>
 			</fieldset>
 		
 			<p><button><?php echo __('Vote'); ?></button></p>

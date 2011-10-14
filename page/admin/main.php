@@ -14,20 +14,23 @@
 	
 	<?php if($poll['polls']) : ?>
 		
-		<p>&nbsp;</p>
-		
-		<ol>
+		<ul class="polls">
 			<?php foreach($poll['polls'] as $key => $poll) : ?>
 				<?php if($poll !== 'deleted') : ?>
+					<?php $id = $poll['id']; ?>
 					<li>
-						<strong><?php echo $poll['question']; ?></strong> -
-						<a href="admin.php?page=sp-view&amp;id=<?php echo $poll['id']; ?>">view</a> | <a href="admin.php?page=sp-edit&amp;id=<?php echo $poll['id']; ?>">edit</a> | <a href="admin.php?page=sp-delete&amp;id=<?php echo $poll['id']; ?>">delete</a><br />
-						Shortcode: <code>[poll id="<?php echo $poll['id']; ?>"]</code>
-						<p>&nbsp;</p>
+						<strong><?php echo $poll['question']; ?></strong>
+						<p>Shortcode: <code>[poll id='<?php echo $id; ?>']</code></p>
+						<p class="center">
+							<a href="admin.php?page=sp-view&amp;id=<?php echo $id; ?>" class="button">view</a>
+							<a href="admin.php?page=sp-update&amp;id=<?php echo $id; ?>" class="button">update</a>
+							<a href="admin.php?page=sp-resete&amp;id=<?php echo $id; ?>" class="button">reset</a>
+							<a href="admin.php?page=sp-delete&amp;id=<?php echo $id; ?>" class="button">delete</a>
+						</p>
 					</li>
 				<?php endif; ?>
 			<?php endforeach; ?>
-		</ol>
+		</ul>
 		
 	<?php else : ?>
 		

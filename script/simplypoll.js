@@ -54,8 +54,6 @@ jQuery(function(){
 			dataType:	'html',
 		}).responseText;
 
-		console.log(html);
-
 		var pollID 	= '#poll-'+data.pollid;
 
 		$(pollID).fadeIn('slow', function() { $(this).append(html); });

@@ -8,44 +8,26 @@ Author: WolfieZero
 Author URI: http://wolfiezero.com/
 */
 
-global $wpdb;
-
-
-define('SP_VERSION',		'1.3');
-define('SP_DIR',			dirname(__FILE__).'/');
-define('SP_FILE',			__FILE__);
-define('SP_URL',			'http://'.$_SERVER['HTTP_HOST'].'/wp-content/plugins/simply-poll/');
-define('SP_URI',			$_SERVER['DOCUMENT_ROOT'].'/wp-content/plugins/simply-poll/');
-define('SP_TABLE',			$wpdb->get_blog_prefix().'sp_polls');
-define('SP_DIRECT_ACCESS',	'I don\'t think you should be here?');
-define('SP_CSS_USER',		plugins_url('/simply-poll/css/default.css'));
-define('SP_CSS_ADMIN',		plugins_url('/simply-poll/css/admin.css'));
+require('config.php');
 
 if( !function_exists('add_action') ) {
 	echo SP_DIRECT_ACCESS;
 	exit;
 }
 
-require('lib/simplypoll.php');
-require('lib/admin.php');
-require('lib/db.php');
-
-add_shortcode('poll', 'simplyPoll');
-add_action('admin_head', function() {
-		echo '<link type="text/css" rel="stylesheet/css" media="all" href="'.SP_CSS_ADMIN.'" >';
-	} );
-
-wp_register_style('simplypollCSS', SP_CSS_USER, false, SP_VERSION, 'all');
-
-wp_enqueue_style('simplypollCSS');
-wp_enqueue_script('jquery');
-
 // Registers the activation hook - runs the install function when the plugin is activated
-register_activation_hook(__FILE__, 'spInstall');
+register_activation_hook(SP_FILE, 'spInstall');
 
-if( is_admin() ) {
-	simplyPollAdmin();
-}
+require('lib/simplypoll.php');
+require('lib/db.php');
+require('lib/logger.php');
+global $logger;
+$logger =  new logger();
+
+add_action('init', 'simplyPollFiles');
+add_shortcode('poll', 'simplyPollClient');
+
+if( is_admin() ){ simplyPollAdmin(); }
 
 /**
  * Simply Poll Client View
@@ -53,20 +35,39 @@ if( is_admin() ) {
  * 
  * @param	array	$args
  * @return	string	HTML output of the poll
- */
-function simplyPoll($args){	
-	global $simplyPoll;
-	
+ ******************************************************************************/
+function simplyPollClient($args){		
 	$simplyPoll = new SimplyPoll();
 	return $simplyPoll->displayPoll($args);
 }
 
 
+/**
+ * Simply Poll Admin View
+ * Handles Simply Poll for the admin
+ ******************************************************************************/
 function simplyPollAdmin() {
+	require('lib/admin.php');
 	global $spAdmin;
 	$spAdmin = new SimplyPollAdmin();	
 }
 
+
+/**
+ * Simply Poll Files
+ ******************************************************************************/
+function simplyPollFiles(){		
+	wp_register_style('simplypollCSS', SP_CSS_USER, false, SP_VERSION);
+
+	wp_enqueue_style('simplypollCSS');
+	wp_enqueue_script('jquery');
+}
+
+
+/**
+ * Simply Poll Install Script
+ * Installs Simply Poll correctly
+ ******************************************************************************/
 function spInstall() {
 	global $wpdb;
 	

@@ -6,20 +6,53 @@
 	$poll		= $spAdmin->grabPoll($id);
 	$question	= $poll['question'];
 	$answers	= $poll['answers'];
+	$totalvotes	= $poll['totalvotes'];
 
 ?>
 <div class="wrap">
 	<div id="icon-edit-comments" class="icon32"><br /></div> 
 	<h2><?php echo $question; ?></h2>
 	
-	<dl>
-		<?php foreach($answers as $key => $aData) : ?>
-			<dt><?php echo $aData['answer']; ?></dt>
-			<dd><?php echo $aData['vote']; ?></dd>
-		<?php endforeach; ?>
-	</dl>
+	<p>Total votes: <?php echo $totalvotes; ?></p>
 	
-	<form>
-		<button class="button">Reset</button>
-	</form>
+	<div id="poll-pie"></div>
+	
+	<script>
+		jQuery(function(){
+			var $ = jQuery;
+			
+			$(document).ready(function(){
+				var data = [
+					<?php foreach($answers as $key => $answer) : ?>
+						['<strong><?php echo $answer['answer']; ?></strong> votes: <?php echo $answer['vote']; ?>', <?php echo $answer['vote']; ?>],
+					<?php endforeach; ?>
+				];
+				
+				var plot1 = jQuery.jqplot ('poll-pie', [data], {
+					seriesDefaults: {
+						renderer: jQuery.jqplot.PieRenderer,
+						rendererOptions: {
+							showDataLabels: true,
+							fill: false,
+							sliceMargin: 4, 
+						}
+					}, 
+					legend: { 
+						show:		true, 
+						location:	'nw'
+					},
+					grid: {
+						background: 'transparent',
+						borderWidth: 0,
+						shadow: false
+					}
+				});
+			});
+		});
+	</script>
+	
+	<p>
+		<a href="admin.php?page=sp-reset&amp;id=<?php echo $id; ?>" class="button">reset</a>
+	</p>
+
 </div>

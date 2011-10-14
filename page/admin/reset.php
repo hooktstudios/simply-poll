@@ -6,18 +6,18 @@
 	$id = (int)$_GET['id'];
 	$poll = $spAdmin->grabPoll($id);
 		
-	if(isset($_POST['delete']) && $_POST['delete'] == 'Yes') {
-		$pollDB->deletePoll($_POST['id']);
-		$message = 'Poll deleted';
+	if(isset($_POST['reset']) && $_POST['reset'] == 'Yes') {
+		$pollDB->resetPoll($poll);
+		$message = 'Poll reset';
 		
-	} elseif(isset($_POST['delete']) && $_POST['delete'] == 'No') {
-		$message = 'Fair enough, it\'s not deleted';
+	} elseif(isset($_POST['reset']) && $_POST['reset'] == 'No') {
+		$message = 'All poll votes are still intact';
 	}
 	
 ?><div class="wrap">
 	<div id="icon-edit-comments" class="icon32"><br /></div> 
 	<h2>
-		Delete Poll
+		Rest Poll
 	</h2>
 	
 	<?php if(isset($message)) : ?>
@@ -26,7 +26,7 @@
 			setTimeout( "pageRedirect()", 3000 );
 			
 			function pageRedirect() {
-				window.location.replace('<?php admin_url(); ?>admin.php?page=sp-poll');
+				window.location.replace('<?php admin_url(); ?>admin.php?page=sp-view&id=<?php echo $id; ?>');
 			}
 		</script>
 		
@@ -42,12 +42,12 @@
 			<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll">Go back</a></p>
 		<?php else : ?>
 			
-			<p>Are you sure you want to delete poll "<strong><?php echo $poll['question']; ?></strong>"?</p>
+			<p>Are you sure you want to reset poll "<strong><?php echo $poll['question']; ?></strong>"?</p>
 			
 			<form method="post">
 				
 				<input type="hidden" name="id" value="<?php echo $id; ?>" />
-				<p><input type="submit" name="delete" class="button" value="Yes" /> <input type="submit" class="button" name="delete" value="No" /></p>
+				<p><input type="submit" name="reset" class="button" value="Yes" /> <input type="submit" class="button" name="reset" value="No" /></p>
 				
 			</form>
 		

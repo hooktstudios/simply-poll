@@ -2,9 +2,16 @@
 
 class SimplyPoll {
 
-	public	$pollData;
+	private	$pollData;
 	private	$pollDB;
 
+
+	/**
+	 * Simply Poll construct
+	 * Access the Simply Poll's database
+	 * 
+	 * @param	bool	$enque	Set enqued files
+	 *************************************************************************/
 	public function __construct($enque=true) {
 		global $wp_scripts;
 		
@@ -23,6 +30,16 @@ class SimplyPoll {
 			}
 		}
 		
+	}
+	
+	/**
+	 * Poll Database
+	 * Access the Simply Poll's database
+	 * 
+	 * @return	object
+	 *************************************************************************/
+	public function pollDB() {
+		return $this->pollDB;
 	}
 	
 	
@@ -73,8 +90,8 @@ class SimplyPoll {
 
 			$totalVotes = 0;
 
-			foreach($poll['answers'] as $key => $aData){
-				$totalVotes = $totalVotes + $aData['vote'];
+			foreach($poll['answers'] as $key => $answer){
+				$totalVotes = $totalVotes + $answer['vote'];
 			}
 
 			$poll['totalvotes'] = $totalVotes;
@@ -101,7 +118,6 @@ class SimplyPoll {
 		}
 		return $poll;
 	}
-
 	
 
 }

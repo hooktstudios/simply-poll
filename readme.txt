@@ -31,9 +31,9 @@ Creating polls is now easy! With this plugin you can easily create a poll, add i
 * Added plugin URI
 * Added file 'poll-submit.php' to replace 'poll-results.php'
 * Added wp_enqueue_script('jquery'); when shortcode is used
-* Added [Isotope](https://github.com/desandro/isotope) for admin
 * Added [jQuery Validation Plugin](https://github.com/jzaefferer/jquery-validation) for admin
 * Added admin CSS
+* Added default poll CSS
 * Added page/user/poll-results.php to allow custom styling of poll results
 * Added support for none JS clients
 * Removed "ENGINE = MYISAM' from the database install
