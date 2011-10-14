@@ -20,9 +20,6 @@ register_activation_hook(SP_FILE, 'spInstall');
 
 require('lib/simplypoll.php');
 require('lib/db.php');
-require('lib/logger.php');
-global $logger;
-$logger =  new logger();
 
 add_action('init', 'simplyPollFiles');
 add_shortcode('poll', 'simplyPollClient');

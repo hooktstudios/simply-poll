@@ -1,5 +1,7 @@
 <?php
 
+global $wpdb;
+
 define('SP_VERSION',		'1.3');
 define('SP_FILE',			__FILE__);
 define('SP_DIR',			dirname(SP_FILE).'/');
