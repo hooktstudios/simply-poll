@@ -6,18 +6,18 @@
 	$id = (int)$_GET['id'];
 	$poll = $spAdmin->grabPoll($id);
 		
-	if(isset($_POST['reset']) && $_POST['reset'] == 'Yes') {
+	if(isset($_POST['reset']) && $_POST['reset'] == 'yes') {
 		$pollDB->resetPoll($poll);
 		$message = 'Poll reset';
 		
-	} elseif(isset($_POST['reset']) && $_POST['reset'] == 'No') {
+	} elseif(isset($_POST['reset']) && $_POST['reset'] == 'no') {
 		$message = 'All poll votes are still intact';
 	}
 	
 ?><div class="wrap">
 	<div id="icon-edit-comments" class="icon32"><br /></div> 
 	<h2>
-		Rest Poll
+		<?php _e('Reset Poll'); ?>
 	</h2>
 	
 	<?php if(isset($message)) : ?>
@@ -32,25 +32,30 @@
 		
 		<p><?php echo $message; ?></p>
 		
-		<p>Redirecting you back to "<?php echo $poll['question']; ?>" in 3 seconds...</p>
+		<p><?php _e('Page will refresh in a moment...'); ?></p>
 		
-		<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll" class="button">back</a> <a href="<?php admin_url(); ?>admin.php?page=sp-veiw&id=<?php echo $id; ?>" class="button">back</a></p>
+		<p><a href="<?php admin_url(); ?>admin.php?page=sp-veiw&id=<?php echo $id; ?>" class="button"><?php _e('Back'); ?></a></p>
 		
 	<?php else : ?>
 	
 		<?php if(!$poll) : ?>
-			<p>There is no poll with the ID <strong><?php echo $id; ?></p>
+			<p><?php _e('There is no poll with the ID'); ?> <strong><?php echo $id; ?></strong></p>
 			
-			<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll">Go back</a></p>
+			<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll"><?php _e('Back'); ?></a></p>
 		<?php else : ?>
 			
-			<p>Are you sure you want to reset poll "<strong><?php echo $poll['question']; ?></strong>"?</p>
+			<p><?php _e('Are you sure you want to reset poll'); ?> "<strong><?php echo $poll['question']; ?></strong>"?</p>
 			
 			<form method="post">
 				
 				<input type="hidden" name="id" value="<?php echo $id; ?>" />
-				<p><input type="submit" name="reset" class="button" value="Yes" /> <input type="submit" class="button" name="reset" value="No" /></p>
-				
+				<p>
+					<select name="reset">
+						<option value="no"><?php _e('No'); ?></option>
+						<option value="yes"><?php _e('Yes'); ?></option>
+					</select>
+					<input type="submit" class="button" value="<?php _e('Submit'); ?>" />
+				</p>
 			</form>
 		
 		<?php endif; ?>

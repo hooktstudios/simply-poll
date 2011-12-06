@@ -1,9 +1,9 @@
 === Simply Poll ===
-Contributors: wolfiezero, olliea95, fubra
+Contributors: wolfiezero, olliea95, Fubra
 Tags: poll, results, polls, polling, survey, simple, easy, quiz
 Requires at least: 3.0
 Tested up to: 3.2.1
-Stable tag: 1.3
+Stable tag: 1.4β
 
 This plugin easily allows you to create polls.
 
@@ -12,8 +12,6 @@ This plugin easily allows you to create polls.
 == Description ==
 
 Creating polls is now easy! With this plugin you can easily create a poll, add it to a page or post and users can instantly vote. Allows the creation of unlimited polls with up to 10 answers each.
-
-Updated in v1.3, you can now edit the theme with ease! Just head to /simply-poll/css/defaut.css and edit that file for a customized poll
 
 
 
@@ -34,6 +32,26 @@ Updated in v1.3, you can now edit the theme with ease! Just head to /simply-poll
 
 
 == Changelog ==
+
+= 1.4 =
+* Improved AJAX request (no longer using `wp-load.php`)
+* Improved PHP and JS docs
+* Renamed the folder `user` (`/simply-poll/page/user/`) to `client` (`/simply-poll/page/client/`)
+
+= 1.3.4 =
+* Added tanslation support
+* Polls now appear where short code is in content
+
+= 1.3.3 =
+* Fixed database creation issues and display SQL query to use if an error
+
+= 1.3.2 =
+* Fixed repo missing poll-submit.php
+
+= 1.3.1 =
+
+* Repo fixed
+* Minor CSS changes
 
 = 1.3 =
 
@@ -57,6 +75,9 @@ Updated in v1.3, you can now edit the theme with ease! Just head to /simply-poll
 * Improved the poll add/edit script
 
 
+= 1.2 = 
+* Skipped, 1.3 update was more significant
+
 = 1.1 =
 
 * Fix the limiting
@@ -68,7 +89,7 @@ Updated in v1.3, you can now edit the theme with ease! Just head to /simply-poll
 
 
 
-== To Do ==
+== To Do for v2.0 ==
 
 * Add export/import options
 * Make the admin more "WordPress", or at least better looking!

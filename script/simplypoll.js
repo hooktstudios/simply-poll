@@ -1,12 +1,15 @@
-jQuery(function(){
+jQuery(function() {
 
-	var $ = jQuery;
-	$('.poll form').submit(formProcess);
+	var $ = jQuery; 						// Because `$` is easier than using `jQuery`
+	$('.poll form').submit(formProcess);	// Access formProcess() when the poll is submitted
 
 	/**
+	 * Form Process
 	 * Process through the form 
+	 * 
+	 * @param object e
 	 */
-	function formProcess(e){
+	function formProcess(e) {
 		
 		e.preventDefault();
 		
@@ -15,48 +18,80 @@ jQuery(function(){
 			div		= $(this).parent(),
 			action	= $(this).attr('action');
 
-		$(this).fadeOut('slow', function(){
-			$(this).empty();
-			
+		$(this).slideUp('slow', function(){
 			updatePoll(action, poll, answer);
 		});
 	}
+	
 
 	/**
+	 * Update Poll
 	 * Update the results from our AJAX query
+	 * 
+	 * @param string action
+	 * @param int pollID
+	 * @param int answer
 	 */
 	function updatePoll(action, pollID, answer) {
 		
-		if(answer > 0) {
-			var postData = { poll: pollID, answer: answer };
+		if (answer > 0) {
+			var postData = { 
+				action: 'spAjaxSubmit', 
+				poll: pollID, 
+				answer: answer
+			};
 
 		} else {
-			var postData = { poll: pollID };
+			var postData = { 
+				action: 'spAjaxSubmit', 
+				poll: pollID 
+			};
 		}
-				
-		$.ajax({
+		
+		
+		var ajax = $.ajax({
 			type:		'POST',
-			url:		action, 
+			url:		spAjax.url, 
 			data:		postData,
-			success:	displayResults, 
-			dataType:	'JSON'
+			dataType:	'JSON',
+			success:	displayResults,
+			error:		function(e, textStatus, errorThrown) {
+							console.log('An error occured with `updatePoll()`', ajax);
+							console.log(textStatus, errorThrown, e);
+						}
 		});
 	
 	}
 
-	function displayResults(data) {
 
+	/**
+	 * Display Results
+	 * Shows the results when requested
+	 * 
+	 * @param object data
+	 */
+	function displayResults(data) {
+		
+		var postData = {
+			action: 'spAjaxResults',
+			pollid: data.pollid
+		}
+		
 		var html = $.ajax({
 			type:		'POST',
 			async:		false,
-			url:		data.load, 
-			data:		data,
+			url:		spAjax.url, 
+			data:		postData,
 			dataType:	'html',
+			error:		function(e, textStatus, errorThrown) {
+							console.log('An error occured with `displayResults()`');
+							console.log(textStatus, errorThrown, e);
+						}
 		}).responseText;
-
+		
 		var pollID 	= '#poll-'+data.pollid;
-
-		$(pollID).fadeIn('slow', function() { $(this).append(html); });
+		
+		$(pollID).append(html);
 	}
 
 

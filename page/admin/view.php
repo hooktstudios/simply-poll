@@ -13,7 +13,7 @@
 	<div id="icon-edit-comments" class="icon32"><br /></div> 
 	<h2><?php echo $question; ?></h2>
 	
-	<p>Total votes: <?php echo $totalvotes; ?></p>
+	<p><?php _e('Total votes'); ?>: <?php echo $totalvotes; ?></p>
 	
 	<div id="poll-pie"></div>
 	
@@ -24,7 +24,7 @@
 			$(document).ready(function(){
 				var data = [
 					<?php foreach($answers as $key => $answer) : ?>
-						['<strong><?php echo $answer['answer']; ?></strong> votes: <?php echo $answer['vote']; ?>', <?php echo $answer['vote']; ?>],
+						['<strong><?php echo $answer['answer']; ?></strong> <?php _e('votes'); ?>: <?php echo $answer['vote']; ?>', <?php echo $answer['vote']; ?>],
 					<?php endforeach; ?>
 				];
 				
@@ -52,13 +52,13 @@
 	</script>
 	
 	<p>
-		<a href="<?php admin_url(); ?>admin.php?page=sp-update&amp;id=<?php echo $id; ?>" class="button">update</a>
-		<a href="<?php admin_url(); ?>admin.php?page=sp-reset&amp;id=<?php echo $id; ?>" class="button">reset</a>
-		<a href="<?php admin_url(); ?>admin.php?page=sp-delete&amp;id=<?php echo $id; ?>" class="button">delete</a>
+		<a href="<?php admin_url(); ?>admin.php?page=sp-update&amp;id=<?php echo $id; ?>" class="button"><?php _e('update'); ?></a>
+		<a href="<?php admin_url(); ?>admin.php?page=sp-reset&amp;id=<?php echo $id; ?>" class="button"><?php _e('reset'); ?></a>
+		<a href="<?php admin_url(); ?>admin.php?page=sp-delete&amp;id=<?php echo $id; ?>" class="button"><?php _e('delete'); ?></a>
 	</p>
 	
 	<p>
-		<a href="<?php admin_url(); ?>admin.php?page=sp-poll" class="button">back to polls</a>
+		<a href="<?php admin_url(); ?>admin.php?page=sp-poll" class="button"><?php _e('Back'); ?></a>
 	</p>
 
 </div>

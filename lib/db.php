@@ -101,11 +101,15 @@ class SimplyPollDB {
 				WHERE
 					`id`	= '.$id.'
 			';
-			return $wpdb->get_results($sql, ARRAY_A);
+			
+			$data = $wpdb->get_results($sql, ARRAY_A);
+			
+			return $data;
 			
 		} else {
 
 			if($this->pollData){
+				
 				return $this->pollData;
 	
 			} else {

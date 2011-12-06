@@ -2,12 +2,20 @@
 
 global $wpdb;
 
-define('SP_VERSION',		'1.3');
-define('SP_FILE',			__FILE__);
-define('SP_DIR',			dirname(SP_FILE).'/');
-define('SP_URL',			'http://'.$_SERVER['HTTP_HOST'].'/wp-content/plugins/simply-poll/');
-define('SP_URI',			$_SERVER['DOCUMENT_ROOT'].'/wp-content/plugins/simply-poll/');
+define('SP_VERSION',		'1.4β');
+
+define('SP_DIR',			dirname(__FILE__).'/');
+define('SP_URL',			plugins_url('/', __FILE__));
+
+define('SP_SUBMIT',			'lib/submit.php');
+define('SP_DISPLAY',		'page/client/display.php');
+define('SP_RESULTS',		'page/client/results.php');
+
 define('SP_TABLE',			$wpdb->get_blog_prefix().'sp_polls');
+
 define('SP_DIRECT_ACCESS',	'I don\'t think you should be here?');
-define('SP_CSS_USER',		plugins_url('/simply-poll/css/default.css'));
-define('SP_CSS_ADMIN',		plugins_url('/simply-poll/css/admin.css'));
+
+define('SP_CSS_CLIENT',		plugins_url('css/default.css', __FILE__));
+define('SP_CSS_ADMIN',		plugins_url('css/admin.css', __FILE__));
+define('SP_JS_CLIENT',		plugins_url('script/simplypoll.js', __FILE__));
+define('SP_JS_ADMIN',		plugins_url('script/simplypoll-admin.js', __FILE__));

@@ -6,18 +6,18 @@
 	$id = (int)$_GET['id'];
 	$poll = $spAdmin->grabPoll($id);
 		
-	if(isset($_POST['delete']) && $_POST['delete'] == 'Yes') {
+	if(isset($_POST['delete']) && $_POST['delete'] == 'yes') {
 		$pollDB->deletePoll($_POST['id']);
-		$message = 'Poll deleted';
+		$message = __('Poll deleted');;
 		
-	} elseif(isset($_POST['delete']) && $_POST['delete'] == 'No') {
-		$message = 'Fair enough, it\'s not deleted';
+	} elseif(isset($_POST['delete']) && $_POST['delete'] == 'no') {
+		$message = __('Poll not deleted');
 	}
 	
 ?><div class="wrap">
 	<div id="icon-edit-comments" class="icon32"><br /></div> 
 	<h2>
-		Delete Poll
+		<?php _e('Delete Poll'); ?>
 	</h2>
 	
 	<?php if(isset($message)) : ?>
@@ -32,22 +32,28 @@
 		
 		<p><?php echo $message; ?></p>
 		
-		<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll" class="button">back</a></p>
+		<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll" class="button"><?php _e('Back'); ?></a></p>
 		
 	<?php else : ?>
 	
 		<?php if(!$poll) : ?>
-			<p>There is no poll with the ID <strong><?php echo $id; ?></p>
+			<p><?php _e('There is no poll with the ID'); ?> <strong><?php echo $id; ?></strong></p>
 			
-			<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll">Go back</a></p>
+			<p><a href="<?php admin_url(); ?>admin.php?page=sp-poll"><?php _e('Back'); ?></a></p>
 		<?php else : ?>
 			
-			<p>Are you sure you want to delete poll "<strong><?php echo $poll['question']; ?></strong>"?</p>
+			<p><?php _e('Are you sure you want to delete poll'); ?> "<strong><?php echo $poll['question']; ?></strong>"?</p>
 			
 			<form method="post">
 				
 				<input type="hidden" name="id" value="<?php echo $id; ?>" />
-				<p><input type="submit" name="delete" class="button" value="Yes" /> <input type="submit" class="button" name="delete" value="No" /></p>
+				<p>
+					<select name="delete">
+						<option value="no"><?php _e('No'); ?></option>
+						<option value="yes"><?php _e('Yes'); ?></option>
+					</select>
+					<input type="submit" class="button" value="<?php _e('Submit'); ?>" />
+				</p>
 				
 			</form>
 		

@@ -12,7 +12,7 @@
 		
 		$id						= (int)$_GET['id'];
 		$poll					= $spAdmin->grabPoll($id);
-		$formData['display']	= 'Update Poll';
+		$formData['display']	= __('Update Poll');
 		
 	}
 	
@@ -45,8 +45,8 @@
 	<?php if( isset($poll['return']['success']) ) : ?>
 		<h3><?php echo $poll['return']['success']; ?></h3>
 		<p>
-			<a href="admin.php?page=sp-poll">Go back</a> or 
-			<a href="admin.php?page=sp-update&id=<?php echo $poll['return']['pollid']; ?>">update "<?php echo $poll['question']; ?>"</a>
+			<a href="admin.php?page=sp-poll"><?php _e('Back'); ?></a> or 
+			<a href="admin.php?page=sp-update&id=<?php echo $poll['return']['pollid']; ?>"><?php _e('update'); ?> "<?php echo $poll['question']; ?>"</a>
 		</p>
 	<?php else : ?>
 	
@@ -54,8 +54,8 @@
 	
 		<?php if( isset($poll['updated']) ) : ?>
 			<p>
-				Added: <?php echo date('F j, Y, g:i a', $poll['added']); ?><br />
-				Updated: <?php echo date('F j, Y, g:i a', $poll['updated']); ?>
+				<?php _e('Added'); ?>: <?php echo date('F j, Y, g:i a', $poll['added']); ?><br />
+				<?php _e('Updated'); ?>: <?php echo date('F j, Y, g:i a', $poll['updated']); ?>
 			</p>
 		<?php endif; ?>
 
@@ -63,7 +63,7 @@
 		<form method="post" id="polledit">
 			
 			<p>
-				<h2><label for="question">Question</label></h2>
+				<h2><label for="question"><?php _e('Question'); ?></label></h2>
 				<input type="text" name="question" size="50" class="required" id="question" value="<?php
 					if( isset($poll['question']) )
 						echo stripcslashes($poll['question']);
@@ -72,7 +72,7 @@
 			
 			<fieldset id="answers">
 				
-				<legend><h2>Answers</h2></legend>
+				<legend><h2><?php _e('Answers'); ?></h2></legend>
 				<ul>
 					<?php
 						if( isset($poll['answers']) ) {
@@ -106,7 +106,7 @@
 				if( isset($id) ){
 					$buttonValue = $id;
 				} else {
-					$buttonValue = 'new';
+					$buttonValue = __('new');
 				}
 			?>
 			

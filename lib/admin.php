@@ -17,13 +17,13 @@ class SimplyPollAdmin extends SimplyPoll{
 	}
 	
 	public function enqueueFiles() {		
-		wp_enqueue_script('validator',			plugins_url('/script/validator.min.js',			SP_FILE),	false,	SP_VERSION);
-		wp_enqueue_script('jSimplyPollAdmin',	plugins_url('/script/simplypoll-admin.js',		SP_FILE),	false,	SP_VERSION);
-		wp_enqueue_script('jqPlotMain',			plugins_url('/script/jqplot.min.js',			SP_FILE),	false,	SP_VERSION);
-		wp_enqueue_script('jqPlotPie',			plugins_url('/script/jqplot.pieRenderer.js',	SP_FILE),	false,	SP_VERSION);
-		wp_enqueue_script('masonry',			plugins_url('/script/masonry.min.js',			SP_FILE),	false,	SP_VERSION);
+		wp_enqueue_script('validator',			plugins_url('/script/validator.min.js',			dirname(__FILE__)),	false,	SP_VERSION);
+		wp_enqueue_script('jqPlotMain',			plugins_url('/script/jqplot.min.js',			dirname(__FILE__)),	false,	SP_VERSION);
+		wp_enqueue_script('jqPlotPie',			plugins_url('/script/jqplot.pieRenderer.js',	dirname(__FILE__)),	false,	SP_VERSION);
+		wp_enqueue_script('masonry',			plugins_url('/script/masonry.min.js',			dirname(__FILE__)),	false,	SP_VERSION);
 		
-		wp_register_style('spAdminCSS',			plugins_url('/css/admin.css',					SP_FILE),	false,	SP_VERSION);
+		wp_enqueue_script('jSimplyPollAdmin',	SP_JS_ADMIN,	false,	SP_VERSION);
+		wp_register_style('spAdminCSS',			SP_CSS_ADMIN,	false,	SP_VERSION);
 		
 		wp_enqueue_style('jqplotcss');
 		wp_enqueue_style('spAdminCSS');
@@ -39,12 +39,12 @@ class SimplyPollAdmin extends SimplyPoll{
 		
 		add_menu_page('Simply Poll', 'Polls', $capability, $parentPage, array($this, 'getAdminPageMain'),'', 6);
 		
-		add_submenu_page($parentPage,	'Settings',		'Settings',		$capability,	'sp-settings',	array($this, 'getAdminPageSettings'));
-		add_submenu_page($parentPage,	'Add New Poll', 'Add New',		$capability,	'sp-add',		array($this, 'getAdminPageAdd'));
-		add_submenu_page('',			'View Poll',	'View Poll',	$capability,	'sp-view',		array($this, 'getAdminPageView'));
-		add_submenu_page('',			'Update Poll',	'Update Poll',	$capability,	'sp-update',	array($this, 'getAdminPageUpdate'));
-		add_submenu_page('',			'Delete Poll',	'Delete Poll',	$capability,	'sp-delete',	array($this, 'getAdminPageDelete'));
-		add_submenu_page('',			'Reset Poll',	'Reset Poll',	$capability,	'sp-reset',		array($this, 'getAdminPageReset'));
+		add_submenu_page($parentPage,	__('Settings'),		__('Settings'),		$capability,	'sp-settings',	array($this, 'getAdminPageSettings'));
+		add_submenu_page($parentPage,	__('Add New Poll'), __('Add New'),		$capability,	'sp-add',		array($this, 'getAdminPageAdd'));
+		add_submenu_page('',			__('View Poll'),	__('View Poll'),	$capability,	'sp-view',		array($this, 'getAdminPageView'));
+		add_submenu_page('',			__('Update Poll'),	__('Update Poll'),	$capability,	'sp-update',	array($this, 'getAdminPageUpdate'));
+		add_submenu_page('',			__('Delete Poll'),	__('Delete Poll'),	$capability,	'sp-delete',	array($this, 'getAdminPageDelete'));
+		add_submenu_page('',			__('Reset Poll'),	__('Reset Poll'),	$capability,	'sp-reset',		array($this, 'getAdminPageReset'));
 	}	
 	
 	
@@ -98,7 +98,7 @@ class SimplyPollAdmin extends SimplyPoll{
 			unset($pollData['question']);
 			
 		} else {
-			$error[] = 'No question given';
+			$error[] = __('No question given');
 		}
 		
 		
@@ -138,11 +138,11 @@ class SimplyPollAdmin extends SimplyPoll{
 			
 			// Do we have enough answers
 			if( $cntAnswers <= 1 ) {
-				$error[] = 'Need at least 2 answers';
+				$error[] = __('Need at least 2 answers');
 			}
 			
 		} else {
-			$error[] = 'No answers given';
+			$error[] = __('No answers given');
 		}
 		
 			
@@ -155,13 +155,13 @@ class SimplyPollAdmin extends SimplyPoll{
 			
 			if( $pollID > 0 ){
 				if ($pollData['polledit'] == 'new') {
-					$return['success'] = 'New Poll Added';
+					$return['success'] = __('New Poll Added');
 				} elseif($pollData['polledit'] > 0) {
-					$return['success'] = 'Poll Updated';
+					$return['success'] = __('Poll Updated');
 				}
 				$return['pollid'] = $pollID;
 			} else {
-				$return['error'] = 'adding to the DB failed';
+				$return['error'] = __('adding to the DB failed');
 			}
 			
 			$pollForDS['return'] = $return;

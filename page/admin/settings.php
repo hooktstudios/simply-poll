@@ -14,22 +14,22 @@ if (isset($_POST['submit'])) {
 <div class="wrap">
 	<div id="icon-options-general" class="icon32"><br /></div> 
 	<h2>
-		Global Poll Settings
+		<?php _e('Global Poll Settings'); ?>
 	</h2>
 	
 	<?php if(isset($message)) : ?>
 		
 		<p><?php echo $message; ?></p>
 		
-		<p><a href="<?php admin_url(); ?>admin.php?page=sp-settings">Go back</a></p>
+		<p><a href="<?php admin_url(); ?>admin.php?page=sp-settings"><?php _e('Back'); ?></a></p>
 		
 	<?php else : ?>
 		
 		<form method="post">
-			<p>Limit to one submission per computer?</p>
-			<p><input type="radio" name="limit" value="yes" id="limityes" <?php if($limit == 'yes') { echo 'checked="checked"'; } ?> />&nbsp;<label for="limityes">Yes</label></p>
-			<p><input type="radio" name="limit" value="no" id="limitno" <?php if ($limit == 'no') { echo 'checked="checked"'; } ?> />&nbsp;<label for="limitno">No</label></p>
-			<p><input type="submit" name="submit" value="Submit" /></p>
+			<p><?php _e('Limit to one submission per computer'); ?>?</p>
+			<p><input type="radio" name="limit" value="yes" id="limityes" <?php if($limit == 'yes') { echo 'checked="checked"'; } ?> />&nbsp;<label for="limityes"><?php _e('Yes'); ?></label></p>
+			<p><input type="radio" name="limit" value="no" id="limitno" <?php if ($limit == 'no') { echo 'checked="checked"'; } ?> />&nbsp;<label for="limitno"><?php _e('No'); ?></label></p>
+			<p><input type="submit" name="submit" value="<?php _e('Submit'); ?>" class="button-primary" /></p>
 			
 		</form>
 		
