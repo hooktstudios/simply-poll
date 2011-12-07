@@ -11,6 +11,9 @@ Author URI: http://wolfiezero.com/
 require_once('config.php');
 require_once('logger.php');
 
+global $logger;
+$logger = new Logger(dirname(__FILE__).'/', SP_DEBUG);
+
 if( !function_exists('add_action') ) {
 	echo SP_DIRECT_ACCESS;
 	exit;
@@ -25,9 +28,7 @@ require('lib/db.php');
 add_action('init', 'spFiles');
 add_shortcode('poll', 'spClient');
 
-if( is_admin() ){
-	spAdmin(); 
-}
+if( is_admin() ) spAdmin();
 
 
 /**
@@ -37,7 +38,7 @@ if( is_admin() ){
  * @param	array	$args
  * @return	string	HTML output of the poll
  */
-function spClient($args){		
+function spClient($args){	
 	$simplyPoll = new SimplyPoll();
 	return $simplyPoll->displayPoll($args);
 }
@@ -48,8 +49,8 @@ function spClient($args){
  * Handles Simply Poll for the admin
  */
 function spAdmin() {
-	require('lib/admin.php');
 	global $spAdmin;
+	require('lib/admin.php');
 	$spAdmin = new SimplyPollAdmin();
 }
 
@@ -58,7 +59,7 @@ function spAdmin() {
  * Simply Poll Files
  * Loads in the files used for Simply Poll
  */
-function spFiles() {
+function spFiles() {	
 	wp_register_style('sp-client', SP_CSS_CLIENT, false, SP_VERSION);
 	wp_enqueue_style('sp-client');
 
@@ -79,11 +80,29 @@ function spFiles() {
 
 
 function spSubmit() {
+	global $logger;
+	$logger->log('spSubmit()');
 	require(SP_SUBMIT);
 	exit;
 }
 
 function spResults() {
+	global $logger;
+	$logger->log('spResults()');
+	$logger->logVar($_POST, '$_POST');
+	
+	if( isset($_POST['pollid']) ) {
+		$pollid = $_POST['pollid'];
+	}
+	
+	$simplypoll	= new SimplyPoll(false);
+	$results	= $simplypoll->grabPoll($pollid);
+	
+	$logger->logVar($results, '$results');
+	
+	$answers	= $results['answers'];
+	$totalvotes	= $results['totalvotes'];
+	
 	require(SP_RESULTS);
 	exit;
 }

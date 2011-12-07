@@ -13,8 +13,9 @@ class logger {
 	 * 
 	 * @param String $location Where the log file should be located
 	 */
-	function __construct($location='') {
+	function __construct($location='', $display=true) {
 		$this->fp = fopen($location.LOG_FILE, MODE);
+		$this->display = $display;
 	}
 	
 	
@@ -26,9 +27,16 @@ class logger {
 	 * @return bool true
 	 */
 	function log($log) {
-		$write = date(DATE).$log."\r\n";
-		fwrite($this->fp, $write);
-		return true;
+		if($this->display) {
+			
+			$write = date(DATE).$log."\r\n";
+			fwrite($this->fp, $write);
+			
+			return true;
+			
+		} else {
+			return false;
+		}
 	}
 	
 	
@@ -41,11 +49,21 @@ class logger {
 	 * @return bool true
 	 */	
 	function logVar($var, $log=null) {
-		$write = date(DATE);
-		if ($log) $write .= $log.' - ';
-		$write .= print_r($var, true)."\r\n";
-		fwrite($this->fp, $write);
-		return true;
+		if($this->display) {
+			
+			$write = date(DATE);
+			
+			if ($log)
+				$write .= $log.' - ';
+			
+			$write .= print_r($var, true)."\r\n";
+			fwrite($this->fp, $write);
+			
+			return true;
+			
+		} else {
+			return false;
+		}
 	}
 	
 	

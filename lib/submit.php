@@ -1,8 +1,10 @@
 <?php
-global $wp;
+global $wp, $logger;
 
 // Check if poll is set (also can be used to check for direct access)
 if( isset($_POST['poll']) ) {
+
+	$logger->logVar($_POST, '$_POST');
 
 	// Set our poll variables
 	$pollID		= (int)$_POST['poll'];
@@ -11,7 +13,9 @@ if( isset($_POST['poll']) ) {
 	
 	
 	// A vote has been made
-	if( isset($_POST['answer']) ) {	
+	if( isset($_POST['answer']) ) {
+			
+		$logger->log('The int `'.$_POST['answer'].'` has been accepted');
 		
 		$answer = $_POST['answer'];
 	
@@ -27,20 +31,28 @@ if( isset($_POST['poll']) ) {
 		
 		setcookie('sptaken', $taken, time()+315569260, '/');
 
+	} else {
+		$logger->log('The no answer accepted');
 	}
 
 	// No back url has been set so treat it as a Javascript call
 	if( !isset($_POST['backurl']) ) {
 		
 		$return = array(
-			'load'		=> $simplyPoll->submitPoll($pollID, $answer), // This function will add the results
+			'answer'	=> $simplyPoll->submitPoll($pollID, $answer), // This function will add the results
 			'pollid'	=> $pollID
 		);
 		$json = json_encode($return);
 		
+		$logger->logVar($json, '$json');
+		
 		echo $json;
 
 	} else {
+		
+		/**
+		 * This block of code is pretty useless till I have a solution for none JS users
+		 */
 		$simplyPoll->submitPoll($pollID, $answer);
 		
 		$regex = '/(.[^\?]*)/';		

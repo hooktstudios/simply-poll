@@ -3,6 +3,7 @@
 global $wpdb;
 
 define('SP_VERSION',		'1.4β');
+define('SP_DEBUG',			false);
 
 define('SP_DIR',			dirname(__FILE__).'/');
 define('SP_URL',			plugins_url('/', __FILE__));

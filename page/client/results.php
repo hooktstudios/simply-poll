@@ -1,17 +1,3 @@
-<?php
-	if( isset($_POST['pollid']) ) {
-		$pollid = $_POST['pollid'];
-		
-	} else {
-		wp_die(SP_DIRECT_ACCESS);
-	}
-	
-	$simplypoll	= new SimplyPoll(false);
-	$results	= $simplypoll->grabPoll($pollid);
-	$answers	= $results['answers'];
-	$totalvotes	= $results['totalvotes'];
-?>
-
 <dl class="results">
 	<?php foreach($answers as $key => $answer) : ?>
 		

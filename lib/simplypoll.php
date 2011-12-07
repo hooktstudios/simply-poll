@@ -82,14 +82,16 @@ class SimplyPoll {
 	 * 
 	 * @param	int		$pollID
 	 * @param	int		$answer
-	 * @return	JSON
+	 * @return	int
 	 */
 	public function submitPoll($pollID, $answer=null) {
 		
-		$poll = $this->grabPoll($pollID); // Grab the current results
+		global $logger;
 	
 		// The user has provided an answer
 		if( isset($answer) ) {
+			
+			$poll = $this->grabPoll($pollID); // Grab the current results
 			
 			$totalVotes = 0;
 			
@@ -100,21 +102,22 @@ class SimplyPoll {
 
 
 			// Count the total votes
-			foreach($poll['answers'] as $key => $answer){
-				$totalVotes = $totalVotes + $answer['vote'];
+			foreach($poll['answers'] as $key => $thisAnswer){
+				$totalVotes = $totalVotes + $thisAnswer['vote'];
 			}
 			
-
-			$poll['totalvotes'] = $totalVotes; // Update the total count
-
-			$success = $this->pollDB->setPollDB($poll); // Push the results back to store
 			
-			$poll['voted'] = $answer; // User feedback on what they voted on
+			$poll['totalvotes']	= $totalVotes;						// Update the total count
+			$success			= $this->pollDB->setPollDB($poll);	// Push the results back to store
+			$answer				= $poll['answers'][$answer];		// Provide feedback on answer
 			
+			$logger->logVar($answer, '$answer');
+			
+			return $answer;
+			
+		} else{
+			return null;
 		}
-	
-		// the return value needs to be the location of the results file
-		return SP_DIR.SP_RESULTS;
 	}
 	
 	
