@@ -17,10 +17,10 @@ class SimplyPollAdmin extends SimplyPoll{
 	}
 	
 	public function enqueueFiles() {		
-		wp_enqueue_script('validator',			plugins_url('/script/validator.min.js',			dirname(__FILE__)),	false,	SP_VERSION);
-		wp_enqueue_script('jqPlotMain',			plugins_url('/script/jqplot.min.js',			dirname(__FILE__)),	false,	SP_VERSION);
-		wp_enqueue_script('jqPlotPie',			plugins_url('/script/jqplot.pieRenderer.js',	dirname(__FILE__)),	false,	SP_VERSION);
-		wp_enqueue_script('masonry',			plugins_url('/script/masonry.min.js',			dirname(__FILE__)),	false,	SP_VERSION);
+		wp_enqueue_script('validator',	plugins_url('/script/validator.min.js',			dirname(__FILE__)),	false,	SP_VERSION);
+		wp_enqueue_script('jqPlotMain',	plugins_url('/script/jqplot.min.js',			dirname(__FILE__)),	false,	SP_VERSION);
+		wp_enqueue_script('jqPlotPie',	plugins_url('/script/jqplot.pieRenderer.js',	dirname(__FILE__)),	false,	SP_VERSION);
+		wp_enqueue_script('masonry',	plugins_url('/script/masonry.min.js',			dirname(__FILE__)),	false,	SP_VERSION);
 		
 		wp_enqueue_script('jSimplyPollAdmin',	SP_JS_ADMIN,	false,	SP_VERSION);
 		wp_register_style('spAdminCSS',			SP_CSS_ADMIN,	false,	SP_VERSION);
@@ -49,25 +49,25 @@ class SimplyPollAdmin extends SimplyPoll{
 	
 	
 	public function getAdminPageMain(){
-		require(SP_DIR.'/page/admin/main.php');
+		require(SP_DIR.'/'.SP_ADMIN_FOLDER.'/main.php');
 	}
 	public function getAdminPageSettings() {
-		require(SP_DIR.'/page/admin/settings.php');
+		require(SP_DIR.'/'.SP_ADMIN_FOLDER.'/settings.php');
 	}
 	public function getAdminPageView(){
-		require(SP_DIR.'/page/admin/view.php');
+		require(SP_DIR.'/'.SP_ADMIN_FOLDER.'/view.php');
 	}
 	public function getAdminPageAdd(){
-		require(SP_DIR.'/page/admin/edit.php');
+		require(SP_DIR.'/'.SP_ADMIN_FOLDER.'/edit.php');
 	}
 	public function getAdminPageUpdate(){
-		require(SP_DIR.'/page/admin/edit.php');
+		require(SP_DIR.'/'.SP_ADMIN_FOLDER.'/edit.php');
 	}
 	public function getAdminPageDelete(){
-		require(SP_DIR.'/page/admin/delete.php');
+		require(SP_DIR.'/'.SP_ADMIN_FOLDER.'/delete.php');
 	}
 	public function getAdminPageReset(){
-		require(SP_DIR.'/page/admin/reset.php');
+		require(SP_DIR.'/'.SP_ADMIN_FOLDER.'/reset.php');
 	}
 	
 	

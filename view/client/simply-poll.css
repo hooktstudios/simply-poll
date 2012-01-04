@@ -1,4 +1,4 @@
-.poll {
+.sp-poll {
 	font:			Helvetica, Arial, sans-serif;
 	font-weight:	300;
 	border:			1px solid #DDD;
@@ -12,51 +12,54 @@
 	box-shadow:		0 1px 8px	rgba(0, 0, 0, 0.3),
 					0 0 4px 	rgba(0, 0, 0, 0.1) inset;
 }
-	.poll label,
-	.poll input,
-	.poll button {
+	.sp-poll p {
+		margin: 0;
+	}
+	.sp-label,
+	.sp-input-label,
+	.sp-btn {
 		cursor:			pointer;
 	}
-	.poll ul,.poll li{
+	.sp-list,.sp-item {
 		list-style:		none;
 		margin:			0;
 		padding:		0;
 	}
-	.poll li{
+	.sp-item {
 		clear:			both;
 		display:		block;
 		margin:			1em 0;
 	}
-	.poll ul input{
+	.sp-input-radio {
 		float:			left;
 		margin:			0.5em 1em 0 0;
 	}
-	.poll ul label{
+	.sp-label {
 		display:		inline-block;
 		width:			210px;
 	}
 	
-	.poll dl {
+	.sp-results {
 		line-height:	1.5em;	
 		margin:			0.5em 0;
 		font-size:		0.9em;
 	}
-	.poll dt {
+	.sp-answer {
 		font-weight:	300;	
 		margin:			1em 0 0 ;
 	}
-	.poll dd {
+	.sp-answer-response {
 		margin:			0 0 0.5em;
 		border-top:		2px solid #C09;
 		display:		block;
 	}
 	
-	.poll p {
+	.sp-total {
 		margin:			0;
 		text-align:		center;
 	}
 	
-	.poll .question {
+	.sp-question {
 		font-weight:	700;
 		font-size:		1.1em;
 		margin:			0 0 3px;
@@ -64,7 +67,7 @@
 		text-align:		left;
 	}
 	
-	.poll button {
+	.sp-btn {
 		cursor:			pointer;	
 		font-size:		16px;
 		color:			#333;
@@ -75,11 +78,11 @@
 		border-radius:	5px;
 		box-shadow:		0 0 3px	rgba(0, 0, 0, 0.6)
 	}
-	.poll button:hover{
+	.sp-btn:hover {
 		background:		#DDD;
 		box-shadow:		0 0 5px	rgba(0, 0, 0, 0.6)
 	}
-	.poll button:active{
+	.sp-btn:active {
 		background:		#EFEFEF;
 		box-shadow:		0 0 5px	rgba(0, 0, 0, 0.3) inset;
 	}

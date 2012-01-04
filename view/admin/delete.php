@@ -8,7 +8,7 @@
 		
 	if(isset($_POST['delete']) && $_POST['delete'] == 'yes') {
 		$pollDB->deletePoll($_POST['id']);
-		$message = __('Poll deleted');;
+		$message = __('Poll deleted');
 		
 	} elseif(isset($_POST['delete']) && $_POST['delete'] == 'no') {
 		$message = __('Poll not deleted');

@@ -1,15 +1,17 @@
 <?php
 /*
 Plugin Name: Simply Poll
-Version: 1.4β
+Version: 1.4
 Plugin URI: http://wolfiezero.com/wordpress/simply-poll/
-Description: This plugin easily allows you to create polls
+Description: Simply, it adds polling functionailty to your WordPress site
 Author: WolfieZero
 Author URI: http://wolfiezero.com/
 */
 
 require_once('config.php');
-require_once('logger.php');
+require_once('lib/logger.php');
+require_once('lib/simplypoll.php');
+require_once('lib/db.php');
 
 global $logger;
 $logger = new Logger(dirname(__FILE__).'/', SP_DEBUG);
@@ -22,12 +24,12 @@ if( !function_exists('add_action') ) {
 // Registers the activation hook - runs the install function when the plugin is activated
 register_activation_hook(__FILE__, 'spInstall');
 
-require('lib/simplypoll.php');
-require('lib/db.php');
 
-add_action('init', 'spFiles');
-add_shortcode('poll', 'spClient');
+add_action('init', 'spFiles');		// Load the enqued files
+add_shortcode('poll', 'spClient');	// Load the poll for client view
 
+
+// If the user is admin then call their class
 if( is_admin() ) spAdmin();
 
 
@@ -35,10 +37,10 @@ if( is_admin() ) spAdmin();
  * Simply Poll Client
  * Handles Simply Poll on the client side of the site
  * 
- * @param	array	$args
- * @return	string	HTML output of the poll
+ * @param array $args
+ * @return string HTML output of the poll
  */
-function spClient($args){	
+function spClient($args) {	
 	$simplyPoll = new SimplyPoll();
 	return $simplyPoll->displayPoll($args);
 }
@@ -47,6 +49,8 @@ function spClient($args){
 /**
  * Simply Poll Admin 
  * Handles Simply Poll for the admin
+ * 
+ * @return null
  */
 function spAdmin() {
 	global $spAdmin;
@@ -67,15 +71,16 @@ function spFiles() {
 	
 	wp_enqueue_script('sp-client-ajax', plugins_url('script/simplypoll.js', __FILE__), array('jquery'), SP_VERSION, true);
 	wp_localize_script('sp-client-ajax', 'spAjax', array( 'url' => admin_url( 'admin-ajax.php' ) ) );
-	
 
 	// When Submit
-	add_action('wp_ajax_spAjaxSubmit', 'spSubmit'); // ajax for logged in users
-	add_action('wp_ajax_nopriv_spAjaxSubmit', 'spSubmit'); // ajax for not logged in users
+	add_action('wp_ajax_spAjaxSubmit', 'spSubmit');				// ajax for logged in users
+	add_action('wp_ajax_nopriv_spAjaxSubmit', 'spSubmit');		// ajax for not logged in users
 	
 	// When Results
-	add_action('wp_ajax_spAjaxResults', 'spResults'); // ajax for logged in users
-	add_action('wp_ajax_nopriv_spAjaxResults', 'spResults'); // ajax for not logged in users
+	add_action('wp_ajax_spAjaxResults', 'spResults');			// ajax for logged in users
+	add_action('wp_ajax_nopriv_spAjaxResults', 'spResults');	// ajax for not logged in users
+
+	return true;
 }
 
 

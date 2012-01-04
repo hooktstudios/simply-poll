@@ -13,7 +13,6 @@
 	</h2>
 	
 	<?php if($poll['polls']) : ?>
-		
 		<ul class="polls">
 			<?php foreach($poll['polls'] as $key => $poll) : ?>
 				<?php if($poll !== 'deleted') : ?>

@@ -2,11 +2,10 @@
 
 class SimplyPollDB {
 	
-	
 	private $pollData;
 	
 	public function __construct() {
-		
+		return true;
 	}
 	
 	

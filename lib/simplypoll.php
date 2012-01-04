@@ -3,14 +3,15 @@
 class SimplyPoll {
 
 	private	$pollData;
-	private	$pollDB;
+	private	$pollDB;		// Stores the DB class
+	private $pollStrings;	// Store the custom strings
 
 
 	/**
 	 * Simply Poll construct
 	 * Access the Simply Poll's database
 	 * 
-	 * @param	bool	$enque	Set enqued files
+	 * @param bool $enque Set enqued files
 	 */
 	public function __construct($enque=true) {
 		// Establish our DB class
@@ -25,7 +26,7 @@ class SimplyPoll {
 	 * Poll Database
 	 * Access the Simply Poll's database
 	 * 
-	 * @return	object
+	 * @return object
 	 */
 	public function pollDB() {
 		return $this->pollDB;
@@ -39,8 +40,8 @@ class SimplyPoll {
 	 * Display Poll
 	 * Gives the HTML for the poll to display on the front-end
 	 * 
-	 * @param	array	$args
-	 * @return	string
+	 * @param array $args
+	 * @return string
 	 */
 	public function displayPoll(array $args) {
 		
@@ -53,6 +54,7 @@ class SimplyPoll {
 			if( isset($poll['question']) ) {
 				$question	= stripcslashes($poll['question']);
 				$answers	= $poll['answers'];
+				$totalvotes = $poll['totalvotes'];
 				
 				foreach( $answers as $key => $answer ) {
 					$answers[$key]['answer'] = stripcslashes($answer['answer']);
@@ -61,6 +63,18 @@ class SimplyPoll {
 
 				$postFile = plugins_url(SP_SUBMIT, dirname(__FILE__));
 				$thisPage = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+
+				$userCannotTakePoll = false;
+
+				if(
+					(
+						$limit == 'yes' && isset($_COOKIE['sptaken']) && 
+						in_array($args['id'], unserialize($_COOKIE['sptaken']))
+					) || 
+					isset($_GET['simply-poll-return'])  
+				) {
+					$userCannotTakePoll = true;
+				}
 
 				include(SP_DIR.SP_DISPLAY);
 				$content = ob_get_clean();
@@ -80,9 +94,9 @@ class SimplyPoll {
 	 * Passes back the poll results to return a JSON feed of responses. Can
 	 * also just pass back previous results without passing an answer.
 	 * 
-	 * @param	int		$pollID
-	 * @param	int		$answer
-	 * @return	int
+	 * @param int $pollID
+	 * @param int $answer
+	 * @return int
 	 */
 	public function submitPoll($pollID, $answer=null) {
 		
@@ -128,8 +142,8 @@ class SimplyPoll {
 	 * Grab Poll
 	 * Gets the current state of the the poll
 	 *
-	 * @param	int $id
-	 * @return	array
+	 * @param int $id
+	 * @return array
 	 */
 	public function grabPoll($id=null) {
 		
@@ -142,6 +156,21 @@ class SimplyPoll {
 		}
 		
 		return $poll;
+	}
+	
+	
+	/*************************************************************************/
+
+
+	/**
+	 * Grab String
+	 * Pulls the stored string
+	 *
+	 * @param	string $name
+	 * @return	string
+	 */
+	public function grabString($string) {
+
 	}
 	
 
