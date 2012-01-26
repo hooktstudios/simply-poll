@@ -109,6 +109,12 @@ class SimplyPoll {
 			
 			$totalVotes = 0;
 			
+			// Verify answer is valid
+			if(empty($poll['answers'][$answer]))
+			{
+				return null;
+			}
+			
 			// Update the count of the answer
 			$current = $poll['answers'][$answer]['vote'];
 			++$current;
