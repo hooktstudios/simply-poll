@@ -103,7 +103,13 @@ class SimplyPoll {
 		global $logger;
 	
 		// The user has provided an answer
-		if( isset($answer) ) {
+		if( isset($answer) ) {	
+
+			// Log and check votes per IP
+			if(!$this->pollDB->setAnswer($answer, $pollID))
+			{
+				return;
+			}
 			
 			$poll = $this->grabPoll($pollID); // Grab the current results
 			

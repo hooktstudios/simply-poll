@@ -136,6 +136,21 @@ function spInstall() {
 	';
 	
 	$success = $wpdb->query($sql);
+	
+	$sql = '
+	CREATE TABLE IF NOT EXISTS `'.SP_TABLE_ANSWERS.'` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`sp_polls_id` int(11) NOT NULL,
+	`answer_id` int(11) NOT NULL,
+	`ip` char(25) NOT NULL,
+	`created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`id`),
+	KEY `ip` (`ip`),
+	KEY `answer_id` (`answer_id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+	';
+	
+	$success = $success && $wpdb->query($sql);
 
 	return $success;
 }

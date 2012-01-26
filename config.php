@@ -14,6 +14,7 @@ define('SP_RESULTS',		'view/client/results.php');
 define('SP_ADMIN_FOLDER',	'view/admin');
 
 define('SP_TABLE',			$wpdb->get_blog_prefix().'sp_polls');
+define('SP_TABLE_ANSWERS',			$wpdb->get_blog_prefix().'sp_polls_answers');
 
 define('SP_DIRECT_ACCESS',	'I don\'t think you should be here?');
 

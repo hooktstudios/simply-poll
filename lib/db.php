@@ -159,6 +159,32 @@ class SimplyPollDB {
 		return $wpdb->query($sql);
 	}
 	
+	public function setAnswer($answer, $pollID) {
+		global $wpdb;
+		$ip = $_SERVER["REMOTE_ADDR"];
+		$pollID = mysql_escape_string($pollID);
+		
+		$t = $wpdb->get_results(sprintf('SELECT `id` FROM `%s` WHERE sp_polls_id = \'%s\' AND ip = \'%s\' AND DATEDIFF(NOW(), `created`) = 0', 
+			SP_TABLE_ANSWERS, $pollID, $ip));
+		if(!empty($t))
+		{
+			// Not allowed;
+			return false;
+		}
+		
+		$sql = sprintf('
+			INSERT INTO %s (
+				`sp_polls_id` ,
+				`answer_id` ,
+				`ip` ,
+				`created`
+			)
+			VALUES (\'%s\',  \'%s\',  \'%s\', CURRENT_TIMESTAMP);
+		', SP_TABLE_ANSWERS, $pollID, $answer, $ip);
+		
+		return $wpdb->query($sql);
+	}
+	
 	
 	/**
 	 * Delete Poll
