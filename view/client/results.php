@@ -9,4 +9,4 @@
 	<?php endforeach; ?>
 </dl>
 
-<p class="sp-total"><?php _e('Total votes'); ?>: <?php echo $totalvotes; ?></p>
+<?php /*<p class="sp-total"><?php _e('Total votes'); ?>: <?php echo $totalvotes; ?></p> */ ?>

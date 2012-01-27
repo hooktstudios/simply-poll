@@ -29,7 +29,7 @@ if( isset($_POST['poll']) ) {
 		$taken[]	= $pollID;				// Add this poll's ID to the $taken array
 		$taken		= serialize($taken);	// Serialize $taken array ready to be stored again
 		
-		setcookie('sptaken', $taken, time()+315569260, '/');
+		setcookie('sptaken', $taken, time()+60*60*24, '/');
 
 	} else {
 		$logger->log('The no answer accepted');
