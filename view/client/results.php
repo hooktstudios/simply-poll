@@ -1,10 +1,10 @@
 <dl class="sp-results">
 	<?php foreach($answers as $key => $answer) : ?>
 		
-		<?php $percentage = round((int)$answer['vote'] / (int)$totalvotes * 100); ?>
+		<?php $percentage = round((int)$answer['vote'] / (int)$totalvotes * 100, 2); ?>
 		
 		<dt class="sp-answer"><?php echo $answer['answer']; ?></dt>
-		<dd class="sp-answer-response" style="width:<?php echo $percentage; ?>%"><?php echo $percentage; ?>%</dd>
+		<dd class="sp-answer-response" style="width:<?php echo round($percentage); ?>%"><?php printf('%.2f', $percentage); ?>%</dd>
 		
 	<?php endforeach; ?>
 </dl>
